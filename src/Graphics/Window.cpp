@@ -1,5 +1,5 @@
 #include <stdexcept>
-#include "Window.h"
+#include <Graphics/Window.h>
 
 Window::Window(const std::string &title, int width, int height) {
     if (!glfwInit())

@@ -11,14 +11,22 @@ set(GLFW_LIBRARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 include_directories(${GLFW_INCLUDE_DIR})
 
 # Add the executable
-add_executable(FizzleFramework src/source.cpp src/glad.c
-        include/Rectangle.h
-        include/Game.h
-        include/Color.h
-        include/Window.h
-        include/Renderer.h
-        src/Window.cpp
-        src/Renderer.cpp
+add_executable(FizzleFramework src/Game/source.cpp src/glad.c
+        include/Core/Rectangle.h
+        include/Core/Game.h
+        include/Graphics/Color.h
+        include/Graphics/Window.h
+        include/Graphics/Renderer.h
+        src/Graphics/Window.cpp
+        src/Graphics/Renderer.cpp
+        include/Core/GameTime.h
+        src/Core/GameTime.cpp
+        src/Core/Game.cpp
+        include/Game/Game1.h
+        include/Graphics/GraphicsDeviceManager.h
+        include/Content/ContentManager.h
+        include/Graphics/SpriteBatch.h
+        src/Game/Game1.cpp
 )
 
 # Link libraries
