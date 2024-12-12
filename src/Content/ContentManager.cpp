@@ -24,8 +24,7 @@ T *ContentManager::Load(const std::string &assetName) {
 
 
 void ContentManager::Unload(const std::string &assetName) {
-    auto it = m_assets.find(assetName);
-    if (it != m_assets.end()) {
+    if (const auto it = m_assets.find(assetName); it != m_assets.end()) {
         m_assets.erase(it);
     }
 }

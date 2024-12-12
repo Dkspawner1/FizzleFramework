@@ -68,7 +68,7 @@ void Renderer::Initialize() {
     glDeleteShader(fragmentShader);
 }
 
-void Renderer::CheckShaderCompilation(GLuint shader, const char *shaderType) const{
+void Renderer::CheckShaderCompilation(GLuint shader, const char *shaderType) const {
     GLint success;
     GLchar infoLog[512];
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -88,9 +88,10 @@ void Renderer::CheckProgramLinking(const GLuint program) const {
     }
 }
 
-void Renderer::SetClearColor(const Color &color) const{
+void Renderer::SetClearColor(const Color &color) const {
     glClearColor(color.GetR() / 255.0f, color.GetG() / 255.0f, color.GetB() / 255.0f, color.GetA() / 255.0f);
 }
+
 void Renderer::Clear() const {
     glClear(GL_COLOR_BUFFER_BIT);
 }
@@ -101,21 +102,40 @@ void Renderer::Present() {
 
 
 void Renderer::DrawRectangle(const Rectangle &destRect, const Color &color) const {
+    float normalizedX, normalizedY, normalizedWidth, normalizedHeight;
 
-    const std::array vertices = {
-        static_cast<float>(destRect.GetX()), static_cast<float>(destRect.GetY()),
-        static_cast<float>(destRect.GetX() + destRect.GetWidth()), static_cast<float>(destRect.GetY()),
-        static_cast<float>(destRect.GetX() + destRect.GetWidth()), static_cast<float>(destRect.GetY() + destRect.GetHeight()),
-        static_cast<float>(destRect.GetX()), static_cast<float>(destRect.GetY() + destRect.GetHeight())
+    // Get the window dimensions
+    int windowWidth = m_window->GetWidth();
+    int windowHeight = m_window->GetHeight();
+    // Convert rectangle coordinates to normalized device coordinates
+    ConvertToNormalizedDeviceCoordinates(destRect, windowWidth, windowHeight, normalizedX, normalizedY, normalizedWidth, normalizedHeight);
+    const std::array<float, 8> vertices = {
+        normalizedX, normalizedY,
+        normalizedX + normalizedWidth, normalizedY,
+        normalizedX + normalizedWidth, normalizedY - normalizedHeight,
+        normalizedX, normalizedY - normalizedHeight
     };
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
 
     glUseProgram(m_shaderProgram);
+
     // Set color uniform
     glUniform4f(glGetUniformLocation(m_shaderProgram, "color"), color.GetR(), color.GetG(), color.GetB(), color.GetA());
 
     glBindVertexArray(m_vao);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+}
+
+void Renderer::ConvertToNormalizedDeviceCoordinates(const Rectangle &rect, int windowWidth, int windowHeight,
+                                                    float &outX, float &outY, float &outWidth, float &outHeight) const{
+    // Convert X
+    outX = (rect.GetX() / (windowWidth / 2.0f)) - 1.0f;
+    // Convert Y (inverted)
+    outY = 1.0f - (rect.GetY() / (windowHeight / 2.0f));
+
+    // Convert width and height from pixel space to NDC
+    outWidth = rect.GetWidth() / (windowWidth / 2.0f);
+    outHeight = rect.GetHeight() / (windowHeight / 2.0f);
 }

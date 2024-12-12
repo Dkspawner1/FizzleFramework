@@ -22,18 +22,15 @@ void Game1::Update(GameTime &gameTime) {
     }
     double mouseX, mouseY;
     m_inputManager->GetMousePosition(mouseX, mouseY);
-    std::cout << "Mouse X: " << mouseX << std::endl;
-    std::cout << "Mouse Y: " << mouseY << std::endl;
-
+    // std::cout << "Mouse X: " << mouseX << std::endl;
+    // std::cout << "Mouse Y: " << mouseY << std::endl;
     // m_inputManager->SetMousePosition(100,100);
 
 }
 
 void Game1::Draw() {
     spriteBatch->Begin();
-    // Add game-specific drawing code here
-    Rectangle rect(100, 100, 200, 200);
-    Color color(1.0f, 0.0f, 0.0f, 1.0f);
-    spriteBatch->Draw(rect, color);
+    Rectangle rect(0, 0, 200, 400);
+    spriteBatch->Draw(rect, Color::Black);
     spriteBatch->End();
 }
