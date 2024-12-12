@@ -1,4 +1,4 @@
-#include <../include/Core/GameTime.h>
+#include <Core/GameTime.h>
 
 GameTime::GameTime() : m_startTime(std::chrono::steady_clock::now()), m_lastUpdateTime(m_startTime),
                        m_elapsedTime(0.0f), m_totalTime(0.0f), m_deltaTime(0.0f) {
