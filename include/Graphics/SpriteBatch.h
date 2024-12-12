@@ -6,14 +6,10 @@
 
 class SpriteBatch {
 public:
-    SpriteBatch(Renderer *renderer);
-
+    explicit SpriteBatch(Renderer *renderer);
     ~SpriteBatch();
-
     void Begin();
-
     void End();
-
     void Draw(const Rectangle &destRect, const Color &color);
 
 private:

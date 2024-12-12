@@ -12,14 +12,14 @@ public:
     ~Window();
 
     void Initialize();
-    bool ShouldClose() const;
+    [[nodiscard]] bool ShouldClose() const;
     void SwapBuffers();
     void PollEvents();
     void SetFullScreen(bool fullscreen);
 
-    GLFWwindow* GetGLFWWindow() const { return m_window; }
-    int GetWidth() const { return m_width; }
-    int GetHeight() const { return m_height; }
+    [[nodiscard]] GLFWwindow* GetGLFWWindow() const { return m_window; }
+    [[nodiscard]] int GetWidth() const { return m_width; }
+    [[nodiscard]] int GetHeight() const { return m_height; }
 
 private:
     GLFWwindow *m_window;

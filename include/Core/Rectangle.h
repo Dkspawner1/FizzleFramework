@@ -10,8 +10,7 @@ public:
     Rectangle() : m_x(0), m_y(0), m_width(0), m_height(0) {}
 
     // Destructor
-    ~Rectangle() {
-    }
+    ~Rectangle() = default;
 
     // Setters
     void SetRectangle(int x, int y, int width, int height) {
@@ -22,10 +21,10 @@ public:
     }
 
     // Getters
-    int GetX() const { return m_x; }
-    int GetY() const { return m_y; }
-    int GetWidth() const { return m_width; }
-    int GetHeight() const { return m_height; }
+    [[nodiscard]] int GetX() const { return m_x; }
+    [[nodiscard]] int GetY() const { return m_y; }
+    [[nodiscard]] int GetWidth() const { return m_width; }
+    [[nodiscard]] int GetHeight() const { return m_height; }
 
     // Operator overloads
     bool operator==(const Rectangle &other) const {
@@ -36,7 +35,7 @@ public:
         return !(*this == other);
     }
 
-    bool intersects(const Rectangle &other) const {
+    [[nodiscard]] bool intersects(const Rectangle &other) const {
         return (m_x < other.m_x + other.m_width &&
                 m_x + m_width > other.m_x &&
                 m_y < other.m_y + other.m_height &&

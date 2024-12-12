@@ -1,16 +1,20 @@
 #include <Graphics/Renderer.h>
 #include <stdexcept>
 
-Renderer::Renderer(Window* window) : m_window(window), m_vao(0), m_vbo(0), m_shaderProgram(0) {
+Renderer::Renderer(Window *window) : m_window(window), m_vao(0), m_vbo(0), m_shaderProgram(0) {
     // Don't perform OpenGL operations here
 }
-Renderer::~Renderer() {
-    if (m_vao != 0) glDeleteVertexArrays(1, &m_vao);
-    if (m_vbo != 0) glDeleteBuffers(1, &m_vbo);
-    if (m_shaderProgram != 0) glDeleteProgram(m_shaderProgram);
-}
-void Renderer::Initialize() {
 
+Renderer::~Renderer() {
+    if (m_vao != 0)
+        glDeleteVertexArrays(1, &m_vao);
+    if (m_vbo != 0)
+        glDeleteBuffers(1, &m_vbo);
+    if (m_shaderProgram != 0)
+        glDeleteProgram(m_shaderProgram);
+}
+
+void Renderer::Initialize() {
     // Create and bind VAO and VBO
     glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
@@ -22,7 +26,7 @@ void Renderer::Initialize() {
     glEnableVertexAttribArray(0);
 
     // Vertex Shader
-    const char* vertexShaderSource = R"(
+    const char *vertexShaderSource = R"(
         #version 330 core
         layout (location = 0) in vec2 aPos;
         void main() {
@@ -31,7 +35,7 @@ void Renderer::Initialize() {
     )";
 
     // Fragment Shader
-    const char* fragmentShaderSource = R"(
+    const char *fragmentShaderSource = R"(
         #version 330 core
         out vec4 FragColor;
         uniform vec4 color;
@@ -63,7 +67,7 @@ void Renderer::Initialize() {
     glDeleteShader(fragmentShader);
 }
 
-void Renderer::CheckShaderCompilation(GLuint shader, const char* shaderType) {
+void Renderer::CheckShaderCompilation(GLuint shader, const char *shaderType) {
     GLint success;
     GLchar infoLog[512];
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -72,6 +76,7 @@ void Renderer::CheckShaderCompilation(GLuint shader, const char* shaderType) {
         throw std::runtime_error(std::string(shaderType) + " shader compilation failed: " + infoLog);
     }
 }
+
 void Renderer::CheckProgramLinking(GLuint program) {
     GLint success;
     GLchar infoLog[512];
@@ -81,12 +86,10 @@ void Renderer::CheckProgramLinking(GLuint program) {
         throw std::runtime_error("Shader program linking failed: " + std::string(infoLog));
     }
 }
-void Renderer::InitializeGlad() {
-    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
-        throw std::runtime_error("Failed to initialize GLAD");
-    }
-}
 
+void Renderer::SetClearColor(const Color &color) {
+    glClearColor(color.GetR() / 255.0f, color.GetG() / 255.0f, color.GetB() / 255.0f, color.GetA() / 255.0f);
+}
 void Renderer::Clear() const {
     glClear(GL_COLOR_BUFFER_BIT);
 }
@@ -95,15 +98,13 @@ void Renderer::Present() {
     m_window->SwapBuffers();
 }
 
-void Renderer::SetClearColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a) {
-    glClearColor(r, g, b, a);
-}
 
-void Renderer::DrawRectangle(const Rectangle& destRect, const Color& color) const {
+void Renderer::DrawRectangle(const Rectangle &destRect, const Color &color) const {
     float vertices[] = {
         static_cast<float>(destRect.GetX()), static_cast<float>(destRect.GetY()),
         static_cast<float>(destRect.GetX() + destRect.GetWidth()), static_cast<float>(destRect.GetY()),
-        static_cast<float>(destRect.GetX() + destRect.GetWidth()), static_cast<float>(destRect.GetY() + destRect.GetHeight()),
+        static_cast<float>(destRect.GetX() + destRect.GetWidth()),
+        static_cast<float>(destRect.GetY() + destRect.GetHeight()),
         static_cast<float>(destRect.GetX()), static_cast<float>(destRect.GetY() + destRect.GetHeight())
     };
 

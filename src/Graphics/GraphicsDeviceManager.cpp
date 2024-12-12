@@ -10,6 +10,7 @@ GraphicsDeviceManager::~GraphicsDeviceManager() = default;
 void GraphicsDeviceManager::Initialize() {
     m_window->Initialize();
     m_renderer->Initialize();
+    m_renderer->SetClearColor(Color::DeepPink);
 }
 
 void GraphicsDeviceManager::BeginDraw() {

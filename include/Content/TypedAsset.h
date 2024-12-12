@@ -3,7 +3,7 @@
 #include "Asset.h"
 
 template<typename T>
-class TypedAsset : public Asset {
+class TypedAsset final : public Asset {
 public:
     T data;
 };

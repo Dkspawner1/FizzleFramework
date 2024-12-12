@@ -5,14 +5,10 @@
 class GameTime {
 public:
     GameTime();
-
     void Update();
-
-    float GetElapsedTime() const;
-
-    float GetTotalTime() const;
-
-    float GetDeltaTime() const;
+    [[nodiscard]] float GetElapsedTime() const;
+    [[nodiscard]] float GetTotalTime() const;
+    [[nodiscard]] float GetDeltaTime() const;
 
 private:
     std::chrono::steady_clock::time_point m_startTime;
