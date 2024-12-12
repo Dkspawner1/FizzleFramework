@@ -7,6 +7,8 @@ GraphicsDeviceManager::GraphicsDeviceManager(const std::string &title, int width
 
 GraphicsDeviceManager::~GraphicsDeviceManager() = default;
 
+// TODO: when screen gets resized, resize objects to new positions
+
 void GraphicsDeviceManager::Initialize() {
     m_window->Initialize();
     m_renderer->Initialize();

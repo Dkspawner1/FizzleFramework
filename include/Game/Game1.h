@@ -3,6 +3,7 @@
 
 #include <Core/Game.h>
 
+#include "Content/Texture.h"
 #include "Core/InputManager.h"
 
 class Game1 final : public Game {
@@ -22,6 +23,7 @@ protected:
 
 private:
     std::unique_ptr<InputManager> m_inputManager;
+    std::vector<std::unique_ptr<Texture>> m_textures;
 };
 
 #endif //GAME1_H

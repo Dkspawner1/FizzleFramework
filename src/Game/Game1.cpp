@@ -7,10 +7,11 @@
 void Game1::Initialize() {
     Game::Initialize();
     m_inputManager = std::make_unique<InputManager>(graphics->GetWindow()->GetGLFWWindow());
+    m_textures = std::vector<std::unique_ptr<Texture> >();
 }
 
 void Game1::LoadContent() {
-    // Load game-specific content here
+    m_textures.push_back(std::make_unique<Texture>(ContentManager::GetAssetPath("fizzle.png")));
 }
 
 void Game1::Update(GameTime &gameTime) {
@@ -25,12 +26,17 @@ void Game1::Update(GameTime &gameTime) {
     // std::cout << "Mouse X: " << mouseX << std::endl;
     // std::cout << "Mouse Y: " << mouseY << std::endl;
     // m_inputManager->SetMousePosition(100,100);
-
 }
 
 void Game1::Draw() {
     spriteBatch->Begin();
-    Rectangle rect(0, 0, 200, 400);
-    spriteBatch->Draw(rect, Color::Black);
+    Rectangle rect(200, 200, 400, 200); // Define where to draw your texture
+
+    for (auto &texture : m_textures) {
+        if (texture) {
+            spriteBatch->Draw(*texture, rect, Color::CornflowerBlue); // Use Color::White for no tint
+        }
+    }
+
     spriteBatch->End();
-}//
+}

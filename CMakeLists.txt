@@ -10,6 +10,9 @@ find_package(glfw3 REQUIRED)
 add_library(glad STATIC External/glad/glad.c)
 target_include_directories(glad PUBLIC External)
 
+# Add stb_image
+include_directories(External/stb)
+
 # Add the executable
 add_executable(FizzleFramework
         src/Game/source.cpp
@@ -35,6 +38,8 @@ add_executable(FizzleFramework
         include/Content/TypedAsset.h
         include/Core/InputManager.h
         src/Core/InputManager.cpp
+        include/Content/Texture.h
+        src/Content/Texture.cpp
 )
 
 # Set include directories
