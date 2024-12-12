@@ -14,6 +14,9 @@ void Game1::LoadContent() {
     m_textures.push_back(std::make_unique<Texture>(ContentManager::GetAssetPath("fizzle.png")));
 }
 
+Color texColor = Color::White;
+Rectangle texRect(200, 200, 400, 200);
+
 void Game1::Update(GameTime &gameTime) {
     if (m_inputManager->IsKeyDown(GLFW_KEY_W)) {
         std::cout << "Key W is pressed" << std::endl;
@@ -21,20 +24,21 @@ void Game1::Update(GameTime &gameTime) {
     if (m_inputManager->IsMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
         std::cout << "Mouse button left is pressed" << std::endl;
     }
-    double mouseX, mouseY;
-    m_inputManager->GetMousePosition(mouseX, mouseY);
-    // std::cout << "Mouse X: " << mouseX << std::endl;
-    // std::cout << "Mouse Y: " << mouseY << std::endl;
-    // m_inputManager->SetMousePosition(100,100);
+    auto mouseRect = m_inputManager->GetMousePosition();
+    if (mouseRect.intersects(texRect)) {
+        texColor = Color::DarkGray;
+        if (m_inputManager->IsMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
+            texColor = Color::Gray;
+        }
+    } else texColor = Color::White;
 }
 
 void Game1::Draw() {
     spriteBatch->Begin();
-    Rectangle rect(200, 200, 400, 200); // Define where to draw your texture
 
-    for (auto &texture : m_textures) {
+    for (auto &texture: m_textures) {
         if (texture) {
-            spriteBatch->Draw(*texture, rect, Color::CornflowerBlue); // Use Color::White for no tint
+            spriteBatch->Draw(*texture, texRect, texColor);
         }
     }
 

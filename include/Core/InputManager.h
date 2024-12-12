@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <unordered_map>
 
+#include "Rectangle.h"
+
 enum class MouseState {
     LEFT_BUTTON,
     RIGHT_BUTTON,
@@ -27,7 +29,7 @@ public:
 
     bool IsMouseButtonUp(int button) const;
 
-    void GetMousePosition(double &x, double &y) const;
+    Rectangle GetMousePosition() const {return Rectangle(m_mouseX,m_mouseY,1,1);}
     void SetMousePosition(double x, double y);
 
 private:
@@ -44,6 +46,7 @@ private:
     std::unordered_map<int, bool> m_mouseButtonStates;
     double m_mouseX;
     double m_mouseY;
+    Rectangle m_mouseRect;
 };
 
 #endif // INPUTMANAGER_H

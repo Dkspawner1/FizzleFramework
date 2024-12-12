@@ -69,10 +69,6 @@ void InputManager::MouseButtonCallback(GLFWwindow *window, int button, int actio
     }
 }
 
-void InputManager::GetMousePosition(double &x, double &y) const {
-    x = m_mouseX;
-    y = m_mouseY;
-}
 
 void InputManager::SetMousePosition(const double x, const double y) {
     glfwSetCursorPos(m_window, x, y);
