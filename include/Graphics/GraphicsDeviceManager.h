@@ -2,8 +2,8 @@
 #define GRAPHICSDEVICEMANAGER_H
 #include <memory>
 
-#include "Renderer.h"
-#include "Window.h"
+#include <Graphics/Renderer.h>
+#include <Graphics/Window.h>
 
 class GraphicsDeviceManager {
 public:

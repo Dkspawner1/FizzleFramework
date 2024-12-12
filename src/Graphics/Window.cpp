@@ -1,13 +1,15 @@
-#include <stdexcept>
 #include <Graphics/Window.h>
+#include <stdexcept>
 
-Window::Window(const std::string &title, int width, int height) {
+Window::Window(const std::string &title, int width, int height)
+    : m_width(width), m_height(height), m_title(title)
+{
     if (!glfwInit())
         throw std::runtime_error("Failed to initialize GLFW3");
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // Hide the window initially
 
     m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
@@ -26,6 +28,16 @@ Window::~Window() {
     glfwTerminate();
 }
 
+void Window::Initialize() {
+    // Create OpenGL context
+    glfwMakeContextCurrent(m_window);
+
+    // Now it's safe to initialize GLAD
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
+        throw std::runtime_error("Failed to initialize GLAD");
+    }
+}
+
 bool Window::ShouldClose() const {
     return glfwWindowShouldClose(m_window);
 }
@@ -36,6 +48,17 @@ void Window::SwapBuffers() {
 
 void Window::PollEvents() {
     glfwPollEvents();
+}
+
+void Window::SetFullScreen(bool fullscreen) {
+    if (fullscreen) {
+        GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+        glfwSetWindowMonitor(m_window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+    } else {
+        glfwSetWindowMonitor(m_window, nullptr, 100, 100, m_width, m_height, 0);
+        CenterWindow(m_window, m_width, m_height);
+    }
 }
 
 void Window::CenterWindow(GLFWwindow* window, int width, int height) {

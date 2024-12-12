@@ -1,8 +1,8 @@
 #ifndef SPRITEBATCH_H
 #define SPRITEBATCH_H
-#include "Color.h"
-#include "Core/Rectangle.h"
-#include "Renderer.h"
+#include <Graphics/Color.h>
+#include <Core/Rectangle.h>
+#include <Graphics/Renderer.h>
 
 class SpriteBatch {
 public:

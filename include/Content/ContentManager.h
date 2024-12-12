@@ -4,6 +4,8 @@
 #include <string>
 #include <unordered_map>
 
+#include "Asset.h"
+
 class ContentManager {
 public:
     ContentManager();
@@ -18,6 +20,6 @@ public:
     void UnloadAll();
 
 private:
-    std::unordered_map<std::string, std::unique_ptr<void> > m_assets;
+    std::unordered_map<std::string, std::unique_ptr<Asset>> m_assets;
 };
 #endif //CONTENTMANAGER_H
