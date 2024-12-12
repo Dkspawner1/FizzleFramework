@@ -33,6 +33,8 @@ add_executable(FizzleFramework
         src/Graphics/SpriteBatch.cpp
         include/Content/Asset.h
         include/Content/TypedAsset.h
+        include/Core/InputManager.h
+        src/Core/InputManager.cpp
 )
 
 # Set include directories

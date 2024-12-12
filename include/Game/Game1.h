@@ -3,6 +3,8 @@
 
 #include <Core/Game.h>
 
+#include "Core/InputManager.h"
+
 class Game1 final : public Game {
 public:
     Game1() = default;
@@ -17,6 +19,9 @@ protected:
     void Update(GameTime &gameTime) override;
 
     void Draw() override;
+
+private:
+    std::unique_ptr<InputManager> m_inputManager;
 };
 
 #endif //GAME1_H

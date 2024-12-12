@@ -1,3 +1,4 @@
+#include <array>
 #include <Graphics/Renderer.h>
 #include <stdexcept>
 
@@ -67,7 +68,7 @@ void Renderer::Initialize() {
     glDeleteShader(fragmentShader);
 }
 
-void Renderer::CheckShaderCompilation(GLuint shader, const char *shaderType) {
+void Renderer::CheckShaderCompilation(GLuint shader, const char *shaderType) const{
     GLint success;
     GLchar infoLog[512];
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -77,17 +78,17 @@ void Renderer::CheckShaderCompilation(GLuint shader, const char *shaderType) {
     }
 }
 
-void Renderer::CheckProgramLinking(GLuint program) {
+void Renderer::CheckProgramLinking(const GLuint program) const {
     GLint success;
-    GLchar infoLog[512];
     glGetProgramiv(program, GL_LINK_STATUS, &success);
     if (!success) {
-        glGetProgramInfoLog(program, 512, nullptr, infoLog);
+        GLchar infoLog[512];
+        glGetProgramInfoLog(program, sizeof(infoLog), nullptr, infoLog);
         throw std::runtime_error("Shader program linking failed: " + std::string(infoLog));
     }
 }
 
-void Renderer::SetClearColor(const Color &color) {
+void Renderer::SetClearColor(const Color &color) const{
     glClearColor(color.GetR() / 255.0f, color.GetG() / 255.0f, color.GetB() / 255.0f, color.GetA() / 255.0f);
 }
 void Renderer::Clear() const {
@@ -100,16 +101,16 @@ void Renderer::Present() {
 
 
 void Renderer::DrawRectangle(const Rectangle &destRect, const Color &color) const {
-    float vertices[] = {
+
+    const std::array vertices = {
         static_cast<float>(destRect.GetX()), static_cast<float>(destRect.GetY()),
         static_cast<float>(destRect.GetX() + destRect.GetWidth()), static_cast<float>(destRect.GetY()),
-        static_cast<float>(destRect.GetX() + destRect.GetWidth()),
-        static_cast<float>(destRect.GetY() + destRect.GetHeight()),
+        static_cast<float>(destRect.GetX() + destRect.GetWidth()), static_cast<float>(destRect.GetY() + destRect.GetHeight()),
         static_cast<float>(destRect.GetX()), static_cast<float>(destRect.GetY() + destRect.GetHeight())
     };
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
 
     glUseProgram(m_shaderProgram);
     // Set color uniform

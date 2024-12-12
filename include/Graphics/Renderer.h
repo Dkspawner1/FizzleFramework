@@ -13,12 +13,12 @@ public:
     void Initialize();
     void Clear() const;
     void Present();
-    void SetClearColor(const Color& color);
+    void SetClearColor(const Color& color) const;
     void DrawRectangle(const Rectangle &destRect, const Color &color) const;
 
 private:
-    void CheckShaderCompilation(GLuint shader, const char *shaderType);
-    void CheckProgramLinking(GLuint program);
+    void CheckShaderCompilation(GLuint shader, const char *shaderType) const;
+    void CheckProgramLinking(const GLuint program) const;
 
     Window *m_window;
     GLuint m_vao;

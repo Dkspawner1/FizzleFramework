@@ -3,8 +3,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
-
-#include "Asset.h"
+#include <Content/Asset.h>
 
 class ContentManager {
 public:

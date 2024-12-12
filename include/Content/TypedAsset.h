@@ -1,6 +1,6 @@
 #ifndef TYPEDASSET_H
 #define TYPEDASSET_H
-#include "Asset.h"
+#include <Content/Asset.h>
 
 template<typename T>
 class TypedAsset final : public Asset {
