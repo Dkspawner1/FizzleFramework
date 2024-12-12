@@ -33,4 +33,4 @@ void Game1::Draw() {
     Rectangle rect(0, 0, 200, 400);
     spriteBatch->Draw(rect, Color::Black);
     spriteBatch->End();
-}
+}//
