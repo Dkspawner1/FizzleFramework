@@ -53,6 +53,7 @@ add_executable(FizzleFramework
         src/Scenes/SceneManager.cpp
         src/Scenes/GameScene.cpp
         src/Scenes/MenuScene.cpp
+        src/Scenes/LoadingScene.cpp
 )
 
 # Set include directories for the executable target

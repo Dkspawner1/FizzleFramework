@@ -1,15 +1,31 @@
 #ifndef LOADINGSCENE_H
 #define LOADINGSCENE_H
-#include <iostream>
-#include <ostream>
 
-class LoadingScene {
+#include <Scenes/Scene.h>
+#include <Game/Game1.h>
+
+class LoadingScene final : public Scene {
 public:
-    void Show() {
-        std::cout<<"Loading assets, please wait..."<<std::endl;
-    }
-    void Update()
-    {}
+    explicit LoadingScene(Game1 *game);
+
+    void Initialize() override;
+
+    void LoadContent() override;
+
+    void Update(GameTime &gameTime) override;
+
+    void Draw() override;
+
+    void UnloadContent() override;
+
+    bool IsFinished() const { return m_finished; }
+
+    void SetProgress(float progress); // Method to set the loading progress
+
+private:
+    Game1 *m_game; // Reference to the main game
+    float m_progress; // Current loading progress (0.0 to 1.0)
+    bool m_finished = false;
 };
 
-#endif //LOADINGSCENE_H
+#endif // LOADINGSCENE_H

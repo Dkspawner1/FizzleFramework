@@ -11,8 +11,11 @@ void Game1::Initialize() {
     // Initialize SpriteBatch
     spriteBatch = std::make_unique<SpriteBatch>(graphics->GetRenderer());
 
-    // Initialize the SceneManager and change to the initial scene (e.g., MenuScene)
-    m_sceneManager.ChangeScene("Menu");
+    // Change to Loading Scene first before going to Menu or Game Scene
+    m_sceneManager->ChangeToLoadingScene();
+
+    // // Initialize the SceneManager and change to the initial scene (e.g., MenuScene)
+    // m_sceneManager.ChangeScene("Menu");
 }
 
 void Game1::LoadContent() {
@@ -20,9 +23,9 @@ void Game1::LoadContent() {
 }
 
 void Game1::Update(GameTime &gameTime) {
-    m_sceneManager.Update(gameTime); // Update the current scene
+    m_sceneManager->Update(gameTime); // Update the current scene
 }
 
 void Game1::Draw() {
-    m_sceneManager.Draw(); // Draw the current scene
+    m_sceneManager->Draw(); // Draw the current scene
 }

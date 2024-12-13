@@ -12,6 +12,9 @@ public:
     explicit SceneManager(Game1* game) : m_game(game) { InitializeSceneFactories(); }
 
     void ChangeScene(const std::string& sceneType);
+
+    void ChangeToLoadingScene();
+
     void Update(GameTime& gameTime);
     void Draw();
 

@@ -1,6 +1,7 @@
 #include <Scenes/SceneManager.h>
 #include <Scenes/GameScene.h>
 #include <Scenes/MenuScene.h>
+#include <Scenes/LoadingScene.h>
 
 void SceneManager::InitializeSceneFactories() {
     m_sceneFactories["Menu"] = [this]() { return std::make_unique<MenuScene>(m_game); };
@@ -20,6 +21,14 @@ void SceneManager::ChangeScene(const std::string& sceneType) {
     } else {
         throw std::invalid_argument("Invalid scene type: " + sceneType);
     }
+}
+void SceneManager::ChangeToLoadingScene() {
+    if (m_currentScene) {
+        m_currentScene->UnloadContent(); // Unload current scene content if necessary
+    }
+
+    m_currentScene = std::make_unique<LoadingScene>(m_game); // Create and set the loading scene
+    m_currentScene->Initialize();
 }
 
 void SceneManager::Update(GameTime& gameTime) {

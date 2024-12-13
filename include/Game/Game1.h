@@ -14,25 +14,31 @@
 
 class Game1 final : public Game {
 public:
-    Game1() :m_sceneManager(this),  m_jobSystem(std::make_unique<JobSystem>()) {}
+    Game1() : m_sceneManager(std::make_unique<SceneManager>(this)), m_jobSystem(std::make_unique<JobSystem>()) {
+    }
 
     ~Game1() override;
+
     void Run() override { Game::Run(); }
-    SpriteBatch* GetSpriteBatch() const { return spriteBatch.get(); }
-    Window* GetWindow() const { return graphics->GetWindow(); }
+    SpriteBatch *GetSpriteBatch() const { return spriteBatch.get(); }
+    Window *GetWindow() const { return graphics->GetWindow(); }
+    SceneManager *GetSceneManager() const { return m_sceneManager.get(); }
 
 protected:
     void Initialize() override;
+
     void LoadContent() override;
+
     void Update(GameTime &gameTime) override;
+
     void Draw() override;
 
 private:
     // Managers
     std::unique_ptr<InputManager> m_inputManager;
-    SceneManager m_sceneManager;
+    std::unique_ptr<SceneManager> m_sceneManager;
     // Content
-    std::vector<std::unique_ptr<Texture>> m_textures;
+    std::vector<std::unique_ptr<Texture> > m_textures;
     Color m_texColor = Color::White;
     Rectangle m_texRect{200, 400, 400, 200};
     // Multithreading
