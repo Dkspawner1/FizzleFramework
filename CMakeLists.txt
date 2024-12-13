@@ -42,6 +42,17 @@ add_executable(FizzleFramework
         src/Content/Texture.cpp
         include/Content/SpriteFont.h
         src/Content/SpriteFont.cpp
+        include/Threading/Job.h
+        include/Threading/JobSystem.h
+        src/Threading/JobSystem.cpp
+        include/Scenes/LoadingScene.h
+        include/Scenes/Scene.h
+        include/Scenes/MenuScene.h
+        include/Scenes/GameScene.h
+        include/Scenes/SceneManager.h
+        src/Scenes/SceneManager.cpp
+        src/Scenes/GameScene.cpp
+        src/Scenes/MenuScene.cpp
 )
 
 # Set include directories for the executable target
