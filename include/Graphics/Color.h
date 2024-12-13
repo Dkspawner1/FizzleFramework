@@ -1,6 +1,6 @@
 #ifndef COLOR_H
 #define COLOR_H
-#include <glad/glad.h>
+#include <stdint.h>
 
 class Color {
 public:

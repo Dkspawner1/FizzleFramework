@@ -40,6 +40,8 @@ add_executable(FizzleFramework
         src/Core/InputManager.cpp
         include/Content/Texture.h
         src/Content/Texture.cpp
+        include/Content/SpriteFont.h
+        src/Content/SpriteFont.cpp
 )
 
 # Set include directories
