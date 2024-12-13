@@ -44,15 +44,23 @@ add_executable(FizzleFramework
         src/Content/SpriteFont.cpp
 )
 
-# Set include directories
+# Set include directories for the executable target
 target_include_directories(FizzleFramework PRIVATE include)
 
-# Link libraries
-target_link_libraries(FizzleFramework PRIVATE
-        glfw
-        glad
-        opengl32
-        gdi32
-        user32
-        kernel32
-)
+# Link libraries based on the operating system
+if(WIN32)
+    # Windows-specific libraries
+    target_link_libraries(FizzleFramework PRIVATE
+            glfw
+            glad
+            opengl32
+            gdi32
+            user32
+            kernel32)
+elseif(UNIX)
+    # Linux-specific libraries (adjust as necessary)
+    target_link_libraries(FizzleFramework PRIVATE
+            glfw
+            glad
+            GL) # Link against libGL on Linux (no need for gdi32, user32, kernel32)
+endif()
