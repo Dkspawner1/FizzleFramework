@@ -2,6 +2,8 @@
 #include <sstream>
 #include <stb_image.h>
 #include <Content/SpriteFont.h>
+
+
 SpriteFont::SpriteFont(const std::string& name, const std::string& path) : Asset(name) {
     LoadFontFile(path);
 }
@@ -69,7 +71,8 @@ void SpriteFont::LoadTexture(const std::string& texturePath) {
     if (!data) {
         throw std::runtime_error("Failed to load font texture: " + texturePath);
     }
-
+    m_textureWidth = width;
+    m_textureHeight = height;
     glGenTextures(1, &m_textureID);
     glBindTexture(GL_TEXTURE_2D, m_textureID);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -80,3 +83,38 @@ void SpriteFont::LoadTexture(const std::string& texturePath) {
 
     stbi_image_free(data);
 }
+void SpriteFont::DrawString(const std::string& text, float x, float y, const Color& color) const {
+    glBindTexture(GL_TEXTURE_2D, m_textureID);
+
+    float scale = 1.0f; // Adjust this value to change the text size
+    float currentX = x;
+    float currentY = y;
+
+    glBegin(GL_QUADS);
+    for (char c : text) {
+        const CharInfo* charInfo = GetCharInfo(c);
+        if (charInfo) {
+            float x0 = currentX + charInfo->xoffset * scale;
+            float y0 = currentY + charInfo->yoffset * scale;
+            float x1 = x0 + charInfo->width * scale;
+            float y1 = y0 + charInfo->height * scale;
+
+            float s0 = charInfo->x / static_cast<float>(m_textureWidth);
+            float t0 = charInfo->y / static_cast<float>(m_textureHeight);
+            float s1 = (charInfo->x + charInfo->width) / static_cast<float>(m_textureWidth);
+            float t1 = (charInfo->y + charInfo->height) / static_cast<float>(m_textureHeight);
+
+            glColor4f(color.GetR() / 255.0f, color.GetG() / 255.0f, color.GetB() / 255.0f, color.GetA() / 255.0f);
+
+            glTexCoord2f(s0, t0); glVertex2f(x0, y0);
+            glTexCoord2f(s1, t0); glVertex2f(x1, y0);
+            glTexCoord2f(s1, t1); glVertex2f(x1, y1);
+            glTexCoord2f(s0, t1); glVertex2f(x0, y1);
+
+            currentX += charInfo->xadvance * scale;
+        }
+    }
+    glEnd();
+}
+
+// TODO place draw code in either renderer or spritebatch
