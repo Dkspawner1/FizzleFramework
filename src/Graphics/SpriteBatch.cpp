@@ -1,6 +1,8 @@
 #include <stdexcept>
 #include <Graphics/SpriteBatch.h>
 
+
+
 SpriteBatch::SpriteBatch(Renderer *renderer): m_renderer(renderer), m_isDrawing(false) {
 }
 

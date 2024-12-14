@@ -1,69 +1,82 @@
-#include <Content/SpriteFont.h>
-#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <stb_image.h>
-
+#include <Content/SpriteFont.h>
 SpriteFont::SpriteFont(const std::string& name, const std::string& path) : Asset(name) {
-    int width, height, nrChannels;
-    unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-
-    if (data) {
-        glGenTextures(1, &m_textureID);
-        glBindTexture(GL_TEXTURE_2D, m_textureID);
-
-        // Set texture parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        // Upload texture data
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        stbi_image_free(data);
-
-        // Set character width and height (assuming fixed-width font)
-        m_charWidth = width / 94; // Define this based on your font atlas
-        m_charHeight = height;    // Assuming single row of characters
-    } else {
-        std::cerr << "Failed to load font texture: " << path << std::endl;
-        throw std::runtime_error("Failed to load font texture: " + path);
-    }
+    LoadFontFile(path);
 }
 
 SpriteFont::~SpriteFont() {
     glDeleteTextures(1, &m_textureID);
 }
 
-void SpriteFont::DrawString(const std::string& text, float x, float y, const Color& color) const {
+std::string SpriteFont::GetDirectoryPath(const std::string& filePath) {
+    const size_t pos = filePath.find_last_of("/\\");
+    return (pos == std::string::npos) ? "" : filePath.substr(0, pos + 1);
+}
+
+void SpriteFont::LoadFontFile(const std::string& path) {
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        throw std::runtime_error("Failed to open font file: " + path);
+    }
+
+    std::string line;
+    std::string textureName;
+    while (std::getline(file, line)) {
+        if (line.find("common ") == 0) {
+            std::istringstream iss(line);
+            std::string token;
+            while (iss >> token) {
+                if (token.find("lineHeight=") == 0) {
+                    m_lineHeight = std::stoi(token.substr(11));
+                }
+            }
+        } else if (line.find("page ") == 0) {
+            size_t filePos = line.find("file=");
+            if (filePos != std::string::npos) {
+                textureName = line.substr(filePos + 6);
+                textureName = textureName.substr(0, textureName.length() - 1); // Remove quotes
+            }
+        } else if (line.find("char ") == 0) {
+            std::istringstream iss(line);
+            std::string token;
+
+            CharInfo info;
+            int id;
+            while (iss >> token) {
+                if (token.find("id=") == 0) id = std::stoi(token.substr(3));
+                if (token.find("x=") == 0) info.x = std::stoi(token.substr(2));
+                if (token.find("y=") == 0) info.y = std::stoi(token.substr(2));
+                if (token.find("width=") == 0) info.width = std::stoi(token.substr(6));
+                if (token.find("height=") == 0) info.height = std::stoi(token.substr(7));
+                if (token.find("xoffset=") == 0) info.xoffset = std::stoi(token.substr(8));
+                if (token.find("yoffset=") == 0) info.yoffset = std::stoi(token.substr(8));
+                if (token.find("xadvance=") == 0) info.xadvance = std::stoi(token.substr(9));
+            }
+            m_charInfo[static_cast<char>(id)] = info;
+        }
+    }
+    if (!textureName.empty()) {
+        std::string texturePath = GetDirectoryPath(path) + textureName;
+        LoadTexture(texturePath);
+    }
+}
+
+void SpriteFont::LoadTexture(const std::string& texturePath) {
+    int width, height, channels;
+    unsigned char* data = stbi_load(texturePath.c_str(), &width, &height, &channels, STBI_rgb_alpha);
+    if (!data) {
+        throw std::runtime_error("Failed to load font texture: " + texturePath);
+    }
+
+    glGenTextures(1, &m_textureID);
     glBindTexture(GL_TEXTURE_2D, m_textureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // Set up vertex data (and buffer(s)) and configure vertex attributes
-    float vertices[4][4] = {
-        {x, y, 0.0f, 0.0f},                           // Bottom left
-        {x + m_charWidth, y, 1.0f, 0.0f},             // Bottom right
-        {x + m_charWidth, y + m_charHeight, 1.0f, 1.0f}, // Top right
-        {x, y + m_charHeight, 0.0f, 1.0f}             // Top left
-    };
-
-    // Create VAO and VBO here if not already created
-    GLuint VAO, VBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), static_cast<void*>(nullptr));
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void*>(2 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-    // Draw the text quad
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)1);
-
-    glBindVertexArray(0); // Unbind VAO
+    stbi_image_free(data);
 }

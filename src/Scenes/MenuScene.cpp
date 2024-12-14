@@ -2,7 +2,6 @@
 #include <iostream>
 
 void MenuScene::Initialize() {
-
     m_inputManager = std::make_unique<InputManager>(m_game->GetGraphicsDeviceManager()->GetWindow()->GetGLFWWindow());
     m_textureNames.push_back("fizzle.png");
 }
@@ -43,7 +42,7 @@ void MenuScene::Draw() {
     m_game->GetSpriteBatch()->Begin();
 
     for (const auto &textureName: m_textureNames) {
-        if (Texture *texture = m_game->GetContentManager()->Get<Texture>(textureName)) {
+        if (Texture const *texture = m_game->GetContentManager()->Get<Texture>(textureName)) {
             m_game->GetSpriteBatch()->Draw(*texture, m_texRect, m_texColor);
         } else {
             std::cout << "Texture " << textureName << " not found" << std::endl;

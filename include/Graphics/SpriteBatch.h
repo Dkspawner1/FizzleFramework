@@ -3,8 +3,10 @@
 #include <Graphics/Color.h>
 #include <Core/Rectangle.h>
 #include <Graphics/Renderer.h>
+#include <Content/Texture.h>
+#include <Content/SpriteFont.h>
 
-#include "Content/Texture.h"
+
 
 class SpriteBatch {
 public:
@@ -21,6 +23,7 @@ public:
 
     // Draws a colored rectangle
     void Draw(const Rectangle &destRect, const Color &color);
+
 
 private:
     Renderer *m_renderer;

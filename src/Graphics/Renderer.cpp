@@ -203,6 +203,7 @@ void Renderer::DrawRectangle(const Rectangle &destRect, const Color &color) cons
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
+
 void Renderer::ConvertToNormalizedDeviceCoordinates(const Rectangle &rect, int windowWidth, int windowHeight,
                                                     float &outX, float &outY, float &outWidth, float &outHeight) const {
     // Convert X

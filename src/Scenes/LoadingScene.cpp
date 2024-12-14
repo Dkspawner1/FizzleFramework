@@ -3,12 +3,16 @@
 
 
 void LoadingScene::Initialize() {
-    // Initialization logic if needed
+    m_font= "tf.fnt";
 }
 
 void LoadingScene::LoadContent() {
-    // Simulate loading content here
-    // You can use a loop or timer to update progress
+        try {
+            m_game->GetContentManager()->ClaimAsset<SpriteFont>(m_font);
+            std::cout << "Font " << m_font << " loaded successfully" << std::endl;
+        } catch (const std::exception& e) {
+            std::cerr << "Failed to load font " << m_font << ": " << e.what() << std::endl;
+        }
 }
 
 void LoadingScene::Update(GameTime &gameTime) {

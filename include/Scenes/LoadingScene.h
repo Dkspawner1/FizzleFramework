@@ -23,6 +23,7 @@ public:
     void SetProgress(float progress); // Method to set the loading progress
 
 private:
+    std::string m_font;
     float m_progress; // Current loading progress (0.0 to 1.0)
     bool m_finished = false;
 };
