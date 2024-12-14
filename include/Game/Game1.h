@@ -14,30 +14,22 @@
 
 class Game1 final : public Game {
 public:
-    Game1() : m_jobSystem(std::make_unique<JobSystem>()) {
-        m_sceneManager = std::make_unique<SceneManager>(this);
-    }
+    Game1();
 
     ~Game1() override = default;
 
-    Window *GetWindow() const { return GetGraphicsDeviceManager()->GetWindow(); }
+    Window* GetWindow() const { return GetGraphicsDeviceManager()->GetWindow(); }
+    friend int main(int argc, char* argv[]);
 
-    friend int main(int argc, char *argv[]);
 
 protected:
     void Initialize() override;
-
     void LoadContent() override;
-
-    void Update(GameTime &gameTime) override;
-
+    void Update(GameTime& gameTime) override;
     void Draw() override;
-    std::unique_ptr<SceneManager> m_sceneManager;
-
 
 private:
     std::unique_ptr<InputManager> m_inputManager;
     std::unique_ptr<JobSystem> m_jobSystem;
 };
-
 #endif // GAME1_H

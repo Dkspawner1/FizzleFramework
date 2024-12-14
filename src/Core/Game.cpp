@@ -4,10 +4,10 @@
 
 #include "Scenes/SceneManager.h"
 
-Game::Game() : m_graphics(std::make_unique<GraphicsDeviceManager>("FizzleFramework", 1600, 900)),
+Game::Game() : m_sceneManager(std::make_unique<SceneManager>(this)),
+               m_graphics(std::make_unique<GraphicsDeviceManager>("FizzleFramework", 1600, 900)),
                m_contentManager(std::make_unique<ContentManager>()),
-               m_spriteBatch(nullptr),
-               m_sceneManager(std::make_unique<SceneManager>(this)) {
+               m_spriteBatch(nullptr) {
 }
 
 Game::~Game() = default;

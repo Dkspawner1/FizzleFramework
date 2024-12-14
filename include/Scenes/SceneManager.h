@@ -8,11 +8,11 @@
 #include <Scenes/Scene.h>
 class SceneManager {
 public:
-    explicit SceneManager(Game* game) : m_game(game) {}
+    explicit SceneManager(Game* game);
     void ChangeScene(const std::string& sceneType);
-    void ChangeToLoadingScene();
     void Update(GameTime& gameTime);
     void Draw();
+
 
 private:
     Game* m_game;

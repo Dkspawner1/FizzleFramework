@@ -25,9 +25,8 @@ protected:
     virtual void LoadContent();
     virtual void Update(GameTime& gameTime);
     virtual void Draw();
+
     std::unique_ptr<SceneManager> m_sceneManager;
-
-
 
 private:
     std::unique_ptr<GraphicsDeviceManager> m_graphics;

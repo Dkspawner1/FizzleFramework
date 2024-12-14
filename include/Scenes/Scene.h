@@ -3,10 +3,9 @@
 #include <Core/GameTime.h>
 #include <Core/Game.h>
 
-
 class Scene {
 public:
-    explicit Scene(Game* game);
+    explicit Scene(Game* game)  : m_game(game){}
 
     virtual ~Scene() = default;
 
