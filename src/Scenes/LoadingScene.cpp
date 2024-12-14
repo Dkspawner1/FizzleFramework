@@ -1,8 +1,6 @@
 #include <Scenes/LoadingScene.h>
 #include <iostream>
 
-LoadingScene::LoadingScene(Game1 *game) : m_game(game), m_progress(0.0f) {
-}
 
 void LoadingScene::Initialize() {
     // Initialization logic if needed

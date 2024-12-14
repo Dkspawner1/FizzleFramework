@@ -6,7 +6,7 @@
 
 class LoadingScene final : public Scene {
 public:
-    explicit LoadingScene(Game1 *game);
+    explicit LoadingScene(Game* game) : Scene(game) {}
 
     void Initialize() override;
 
@@ -23,7 +23,6 @@ public:
     void SetProgress(float progress); // Method to set the loading progress
 
 private:
-    Game1 *m_game; // Reference to the main game
     float m_progress; // Current loading progress (0.0 to 1.0)
     bool m_finished = false;
 };

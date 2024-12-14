@@ -2,9 +2,12 @@
 #include <thread>
 #include <Core/Game.h>
 
-Game::Game() : graphics(std::make_unique<GraphicsDeviceManager>("FizzleFramework", 1600, 900)),
-               content(std::make_unique<ContentManager>()),
-               spriteBatch(nullptr) {
+#include "Scenes/SceneManager.h"
+
+Game::Game() : m_graphics(std::make_unique<GraphicsDeviceManager>("FizzleFramework", 1600, 900)),
+               m_contentManager(std::make_unique<ContentManager>()),
+               m_spriteBatch(nullptr),
+               m_sceneManager(std::make_unique<SceneManager>(this)) {
 }
 
 Game::~Game() = default;
@@ -17,16 +20,16 @@ void Game::Run() {
     constexpr float targetFPS = 60.0f; // Change this to 144.0f for 144 FPS
     constexpr float targetFrameTime = 1.0f / targetFPS; // Time per frame in seconds
 
-    while (!graphics->GetWindow()->ShouldClose()) {
+    while (!m_graphics->GetWindow()->ShouldClose()) {
         auto frameStartTime = std::chrono::steady_clock::now(); // Start timing the frame
 
-        gameTime.Update();
-        graphics->GetWindow()->PollEvents();
-        Update(gameTime);
+        m_gameTime.Update();
+        m_graphics->GetWindow()->PollEvents();
+        Update(m_gameTime);
 
-        graphics->BeginDraw();
+        m_graphics->BeginDraw();
         Draw();
-        graphics->EndDraw();
+        m_graphics->EndDraw();
 
         auto frameEndTime = std::chrono::steady_clock::now(); // End timing the frame
         std::chrono::duration<float> elapsedTime = frameEndTime - frameStartTime; // Calculate elapsed time
@@ -42,8 +45,8 @@ void Game::Run() {
 }
 
 void Game::Initialize() {
-    graphics->Initialize();
-    spriteBatch = std::make_unique<SpriteBatch>(graphics->GetRenderer());
+    m_graphics->Initialize();
+    m_spriteBatch = std::make_unique<SpriteBatch>(m_graphics->GetRenderer());
 }
 
 void Game::LoadContent() {

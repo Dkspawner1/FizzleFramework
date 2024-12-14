@@ -3,10 +3,9 @@
 
 #include <Scenes/Scene.h>
 #include <Game/Game1.h>
-
 class GameScene : public Scene {
 public:
-    explicit GameScene(Game1 *game); // Constructor declaration
+    explicit GameScene(Game* game) : Scene(game) {}
 
     void Initialize() override;
     void LoadContent() override;

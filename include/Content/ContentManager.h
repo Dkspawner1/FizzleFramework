@@ -1,32 +1,38 @@
 #ifndef CONTENTMANAGER_H
 #define CONTENTMANAGER_H
+#include <future>
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <Content/Asset.h>
 
+#include "SpriteFont.h"
 #include "Texture.h"
 
 class ContentManager {
 public:
-    ContentManager();
-
-    ~ContentManager();
+    ContentManager() = default;
+    ~ContentManager() { UnloadAll(); }
 
     template<typename T>
-    T *Load(const std::string &assetName);
+    std::future<T*> ClaimAssetAsync(const std::string& assetName);
 
-    Texture* LoadTexture(const std::string &assetName);
+    template<typename T>
+    T* ClaimAsset(const std::string& assetName);
 
-    void Unload(const std::string &assetName);
+    void ReleaseAsset(const std::string& assetName);
+
+    template<typename T>
+    T* Get(const std::string& assetName);
 
     void UnloadAll();
 
-    static std::string GetAssetPath(const std::string &assetName) {
-        return std::move("../assets/" + assetName);
+    static std::string GetAssetPath(const std::string& assetName) {
+        return "../assets/" + assetName;
     }
 
 private:
-    std::unordered_map<std::string, std::unique_ptr<Texture> > m_assets;
+    std::unordered_map<std::string, std::pair<std::unique_ptr<Asset>, int>> m_assets;
 };
+
 #endif //CONTENTMANAGER_H

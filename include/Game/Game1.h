@@ -14,15 +14,15 @@
 
 class Game1 final : public Game {
 public:
-    Game1() : m_sceneManager(std::make_unique<SceneManager>(this)), m_jobSystem(std::make_unique<JobSystem>()) {
+    Game1() : m_jobSystem(std::make_unique<JobSystem>()) {
+        m_sceneManager = std::make_unique<SceneManager>(this);
     }
 
-    ~Game1() override;
+    ~Game1() override = default;
 
-    void Run() override { Game::Run(); }
-    SpriteBatch *GetSpriteBatch() const { return spriteBatch.get(); }
-    Window *GetWindow() const { return graphics->GetWindow(); }
-    SceneManager *GetSceneManager() const { return m_sceneManager.get(); }
+    Window *GetWindow() const { return GetGraphicsDeviceManager()->GetWindow(); }
+
+    friend int main(int argc, char *argv[]);
 
 protected:
     void Initialize() override;
@@ -32,18 +32,12 @@ protected:
     void Update(GameTime &gameTime) override;
 
     void Draw() override;
+    std::unique_ptr<SceneManager> m_sceneManager;
+
 
 private:
-    // Managers
     std::unique_ptr<InputManager> m_inputManager;
-    std::unique_ptr<SceneManager> m_sceneManager;
-    // Content
-    std::vector<std::unique_ptr<Texture> > m_textures;
-    Color m_texColor = Color::White;
-    Rectangle m_texRect{200, 400, 400, 200};
-    // Multithreading
     std::unique_ptr<JobSystem> m_jobSystem;
-    std::unique_ptr<SpriteBatch> spriteBatch; // SpriteBatch instance
 };
 
 #endif // GAME1_H

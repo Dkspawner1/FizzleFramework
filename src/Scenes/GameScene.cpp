@@ -1,8 +1,5 @@
 #include <Scenes/GameScene.h>
 
-GameScene::GameScene(Game1 *game) : m_game(game) {
-    // Constructor implementation (if needed)
-}
 
 void GameScene::Initialize() {
     // Initialization logic here

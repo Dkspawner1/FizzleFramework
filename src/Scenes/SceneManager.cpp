@@ -4,6 +4,7 @@
 #include <Scenes/LoadingScene.h>
 
 void SceneManager::InitializeSceneFactories() {
+    m_sceneFactories["Loading"] = [this]() { return std::make_unique<LoadingScene>(m_game); };
     m_sceneFactories["Menu"] = [this]() { return std::make_unique<MenuScene>(m_game); };
     m_sceneFactories["Game"] = [this]() { return std::make_unique<GameScene>(m_game); };
 }
