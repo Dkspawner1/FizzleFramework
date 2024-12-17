@@ -27,6 +27,7 @@ public:
 
     void DrawRectangle(const Rectangle &destRect, const Color &color) const;
 private:
+
     // Function to convert pixel coordinates to normalized device coordinates
     void ConvertToNormalizedDeviceCoordinates(const Rectangle &rect, int windowWidth, int windowHeight,
                                               float &outX, float &outY, float &outWidth, float &outHeight) const;

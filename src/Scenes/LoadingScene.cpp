@@ -43,7 +43,7 @@ void LoadingScene::Draw() {
             << std::string(static_cast<int>((barWidth - filledWidth) / 4), ' ')
             << "]\n";
     if (SpriteFont const *font = m_game->GetContentManager()->Get<SpriteFont>(m_font)) {
-        font->DrawString("This is a test!", 100.0f, 100.0f, Color::Black);
+        // font->DrawString("This is a test!", 100.0f, 100.0f, Color::Black);
     }
     m_game->GetSpriteBatch()->End();
 }
