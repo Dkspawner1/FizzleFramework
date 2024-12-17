@@ -25,6 +25,8 @@ public:
     void DrawRectangle(const Rectangle &destRect, const Color &color) const;
     void DrawTexture(const Texture &texture, const Rectangle &destRect, const Color &color) const;
     void DrawTexture(const Texture &texture, const Rectangle &srcRect, const Rectangle &destRect, const Color &color) const;
+    void DrawFontTexture(const Texture& texture, const Rectangle& srcRect,
+                            const Rectangle& destRect, const Color& color) const;
 
 private:
     // Function to convert pixel coordinates to normalized device coordinates
@@ -39,7 +41,9 @@ private:
     GLuint m_vao;
     GLuint m_vbo;
     GLuint m_texCoordVbo;
-    GLuint m_shaderProgram;
+    GLuint m_textureShaderProgram;
+    GLuint m_fontShaderProgram;
+
 };
 
 #endif //RENDERER_H

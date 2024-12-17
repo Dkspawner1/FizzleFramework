@@ -27,10 +27,20 @@ Texture::Texture(const std::string &name, const std::string &path) : Asset(name)
     stbi_image_free(data);
 }
 
+
 Texture::Texture(const std::string &name, unsigned char *buffer, int width, int height)
     : Asset(name), m_width(width), m_height(height) {
     glGenTextures(1, &m_textureID);
     glBindTexture(GL_TEXTURE_2D, m_textureID);
+
+    // Set texture parameters specifically for font rendering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Upload texture data
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Important for font textures
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, buffer);
 }
 

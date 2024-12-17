@@ -24,7 +24,7 @@ public:
     // Draws a colored rectangle
     void Draw(const Rectangle &destRect, const Color &color) const;
 
-    void DrawString(const Font& font, const std::string& text, float x, float y, float scale, const Color& color);
+    void DrawString(const Font& font, const std::string& text, float x, float y, float scale, const Color& color) const;
 private:
     Renderer *m_renderer;
     bool m_isDrawing;

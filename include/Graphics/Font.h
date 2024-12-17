@@ -1,4 +1,3 @@
-// Font.h
 #ifndef FONT_H
 #define FONT_H
 
@@ -7,7 +6,8 @@
 #include FT_FREETYPE_H
 #include <unordered_map>
 #include <Graphics/Color.h>
-#include <Content/Texture.h>
+
+#include "Content/Texture.h"
 
 struct Character {
     Texture* texture;
@@ -15,7 +15,6 @@ struct Character {
     int Bearing[2];
     unsigned int Advance;
 };
-
 class Font : public Asset {
 public:
     Font(const std::string& name, const std::string& path, int fontSize);

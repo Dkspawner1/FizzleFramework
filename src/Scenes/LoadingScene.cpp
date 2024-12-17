@@ -38,7 +38,7 @@ void LoadingScene::Draw() {
             << std::string(static_cast<int>((barWidth - filledWidth) / 4), ' ')
             << "]\n";
 
-    m_game->GetSpriteBatch()->DrawString(*m_font, "Hello, World!", 100, 100, 1.0f, Color::White);
+    m_game->GetSpriteBatch()->DrawString(*m_font, "Hello, World asdfhasdiu fhauisd fhiuh21iu wh I!uih siurh !", 100, 100, 1.0f, Color::Black);
 
     m_game->GetSpriteBatch()->End();
 }

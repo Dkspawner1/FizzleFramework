@@ -36,7 +36,8 @@ void SpriteBatch::Draw(const Rectangle &destRect, const Color &color) const {
     m_renderer->DrawRectangle(destRect, color);
 }
 
-void SpriteBatch::DrawString(const Font& font, const std::string& text, float x, float y, float scale, const Color& color) {
+void SpriteBatch::DrawString(const Font& font, const std::string& text,
+                           float x, float y, float scale, const Color& color) const {
     if (!m_isDrawing) {
         throw std::runtime_error("SpriteBatch::DrawString called without Begin()");
     }
@@ -44,17 +45,15 @@ void SpriteBatch::DrawString(const Font& font, const std::string& text, float x,
     const auto& characters = font.GetCharacters();
     for (char c : text) {
         const Character& ch = characters.at(c);
-
         float xpos = x + ch.Bearing[0] * scale;
         float ypos = y - (ch.Size[1] - ch.Bearing[1]) * scale;
-
         float w = ch.Size[0] * scale;
         float h = ch.Size[1] * scale;
 
         Rectangle srcRect(0, 0, ch.Size[0], ch.Size[1]);
         Rectangle destRect(xpos, ypos, w, h);
 
-        m_renderer->DrawTexture(*ch.texture, srcRect, destRect, color);
+        m_renderer->DrawFontTexture(*ch.texture, srcRect, destRect, color);
 
         x += (ch.Advance >> 6) * scale;
     }
