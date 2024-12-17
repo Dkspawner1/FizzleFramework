@@ -22,11 +22,9 @@ public:
 
     void SetClearColor(const Color &color) const;
 
-
+    void DrawRectangle(const Rectangle &destRect, const Color &color) const;
     void DrawTexture(const Texture &texture, const Rectangle &destRect, const Color &color) const;
     void DrawTexture(const Texture &texture, const Rectangle &srcRect, const Rectangle &destRect, const Color &color) const;
-
-    void DrawRectangle(const Rectangle &destRect, const Color &color) const;
 
 private:
     // Function to convert pixel coordinates to normalized device coordinates
