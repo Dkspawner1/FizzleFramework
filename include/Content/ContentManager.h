@@ -5,7 +5,6 @@
 #include <string>
 #include <unordered_map>
 #include <Content/Asset.h>
-#include "SpriteFont.h"
 #include "Texture.h"
 
 class ContentManager {

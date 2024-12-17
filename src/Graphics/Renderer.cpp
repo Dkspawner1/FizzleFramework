@@ -19,7 +19,7 @@ void Renderer::Initialize() {
     // Create and bind VAO and VBO
     glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
-    glGenBuffers(1,&m_texCoordVbo);
+    glGenBuffers(1, &m_texCoordVbo);
 
     glBindVertexArray(m_vao);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -42,7 +42,7 @@ void Renderer::Initialize() {
         TexCoords = aTexCoord; // Pass texture coordinates to fragment shader
     }
 )";
-    const char *fragmentShaderSource = R"(
+    const auto fragmentShaderSource = R"(
 #version 330 core
 out vec4 FragColor;
 in vec2 TexCoords; // Texture coordinates from vertex shader
@@ -115,9 +115,17 @@ void Renderer::Clear() const {
 void Renderer::Present() {
     m_window->SwapBuffers();
 }
-
 void Renderer::DrawTexture(const Texture &texture, const Rectangle &destRect, const Color &color) const {
-    float normalizedX, normalizedY, normalizedWidth, normalizedHeight;
+    Rectangle srcRect(0, 0, texture.GetWidth(), texture.GetHeight());
+    DrawTexture(texture, srcRect, destRect, color);
+}
+
+void Renderer::DrawTexture(const Texture &texture, const Rectangle &srcRect, const Rectangle &destRect,
+                           const Color &color) const {
+    float normalizedX;
+    float normalizedY;
+    float normalizedWidth;
+    float normalizedHeight;
 
     // Get window dimensions
     int windowWidth = m_window->GetWidth();
@@ -136,25 +144,30 @@ void Renderer::DrawTexture(const Texture &texture, const Rectangle &destRect, co
     };
 
     const std::array<float, 8> texCoords = {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        1.0f, 1.0f,
-        0.0f, 1.0f
+        static_cast<float>(srcRect.GetX()) / texture.GetWidth(),
+        static_cast<float>(srcRect.GetY()) / texture.GetHeight(),
+        static_cast<float>(srcRect.GetX() + srcRect.GetWidth()) / texture.GetWidth(),
+        static_cast<float>(srcRect.GetY()) / texture.GetHeight(),
+        static_cast<float>(srcRect.GetX() + srcRect.GetWidth()) / texture.GetWidth(),
+        static_cast<float>(srcRect.GetY() + srcRect.GetHeight()) / texture.GetHeight(),
+        static_cast<float>(srcRect.GetX()) / texture.GetWidth(),
+        static_cast<float>(srcRect.GetY() + srcRect.GetHeight()) / texture.GetHeight()
     };
+
 
     // Bind vertex buffer and upload vertex data
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
 
     // Set up vertex attributes for position
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void *) 0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), static_cast<void *>(nullptr));
     glEnableVertexAttribArray(0);
 
     // Bind and upload texture coordinates
     glBindBuffer(GL_ARRAY_BUFFER, m_texCoordVbo);
     glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(float), texCoords.data(), GL_DYNAMIC_DRAW);
 
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void *) 0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), static_cast<void *>(nullptr));
     glEnableVertexAttribArray(1);
 
     // Bind the texture and set uniforms
@@ -176,7 +189,10 @@ void Renderer::DrawTexture(const Texture &texture, const Rectangle &destRect, co
 }
 
 void Renderer::DrawRectangle(const Rectangle &destRect, const Color &color) const {
-    float normalizedX, normalizedY, normalizedWidth, normalizedHeight;
+    float normalizedX;
+    float normalizedY;
+    float normalizedWidth;
+    float normalizedHeight;
 
     // Get the window dimensions
     int windowWidth = m_window->GetWidth();

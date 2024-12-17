@@ -40,8 +40,6 @@ add_executable(FizzleFramework
         src/Core/InputManager.cpp
         include/Content/Texture.h
         src/Content/Texture.cpp
-        include/Content/SpriteFont.h
-        src/Content/SpriteFont.cpp
         include/Threading/Job.h
         include/Threading/JobSystem.h
         src/Threading/JobSystem.cpp

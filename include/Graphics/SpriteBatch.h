@@ -4,8 +4,6 @@
 #include <Core/Rectangle.h>
 #include <Graphics/Renderer.h>
 #include <Content/Texture.h>
-#include <Content/SpriteFont.h>
-
 
 
 class SpriteBatch {
@@ -19,11 +17,13 @@ public:
     void End();
 
     // Draw a texture sized to a rectangle
-    void Draw(const Texture &texture, const Rectangle &destRect, const Color &color);
+    void Draw(const Texture &texture, const Rectangle &destRect, const Color &color) const;
 
     // Draws a colored rectangle
-    void Draw(const Rectangle &destRect, const Color &color);
+    void Draw(const Rectangle &destRect, const Color &color) const;
 
+    // Draws text to the screen with a provided font: *.fnt& | .*tga
+    // void DrawString(const SpriteFont &font, const std::string &text, float x, float y, const Color &color);
 
 private:
     Renderer *m_renderer;

@@ -2,7 +2,6 @@
 #include <Graphics/SpriteBatch.h>
 
 
-
 SpriteBatch::SpriteBatch(Renderer *renderer): m_renderer(renderer), m_isDrawing(false) {
 }
 
@@ -22,7 +21,7 @@ void SpriteBatch::End() {
     m_isDrawing = false;
 }
 
-void SpriteBatch::Draw(const Texture &texture, const Rectangle &destRect, const Color &color) {
+void SpriteBatch::Draw(const Texture &texture, const Rectangle &destRect, const Color &color) const {
     if (!m_isDrawing) {
         throw std::runtime_error("SpriteBatch::Draw called while not drawing");
     }
@@ -30,9 +29,10 @@ void SpriteBatch::Draw(const Texture &texture, const Rectangle &destRect, const 
     m_renderer->DrawTexture(texture, destRect, color);
 }
 
-void SpriteBatch::Draw(const Rectangle &destRect, const Color &color) {
+void SpriteBatch::Draw(const Rectangle &destRect, const Color &color) const {
     if (!m_isDrawing) {
         throw std::runtime_error("SpriteBatch::Draw called without Begin");
     }
     m_renderer->DrawRectangle(destRect, color);
 }
+

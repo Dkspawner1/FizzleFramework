@@ -3,15 +3,17 @@
 
 
 void LoadingScene::Initialize() {
-    m_font = "tf.fnt";
+    m_fonts.push_back("tf.fnt");
 }
 
 void LoadingScene::LoadContent() {
-    try {
-        m_game->GetContentManager()->ClaimAsset<SpriteFont>(m_font);
-        std::cout << "Font " << m_font << " loaded successfully" << std::endl;
-    } catch (const std::exception &e) {
-        std::cerr << "Failed to load font " << m_font << ": " << e.what() << std::endl;
+    for (const auto &font: m_fonts) {
+        try {
+            // m_game->GetContentManager()->ClaimAsset<SpriteFont>(font);
+            std::cout << "Font " << font << " loaded successfully" << std::endl;
+        } catch (const std::exception &e) {
+            std::cerr << "Failed to load font " << font << ": " << e.what() << std::endl;
+        }
     }
 }
 
@@ -42,9 +44,10 @@ void LoadingScene::Draw() {
     std::cout << "[" << std::string(static_cast<int>(filledWidth / 4), '=')
             << std::string(static_cast<int>((barWidth - filledWidth) / 4), ' ')
             << "]\n";
-    if (SpriteFont const *font = m_game->GetContentManager()->Get<SpriteFont>(m_font)) {
-        // font->DrawString("This is a test!", 100.0f, 100.0f, Color::Black);
-    }
+    // if (SpriteFont const *font = m_game->GetContentManager()->Get<SpriteFont>(m_fonts[0])) {
+    //     // font->DrawString("This is a test!", 100.0f, 100.0f, Color::Black);
+    //     m_game->GetSpriteBatch()->DrawString(*font, "THIS IS A TEST!!!", 100, 100, Color::Black);
+    // }
     m_game->GetSpriteBatch()->End();
 }
 

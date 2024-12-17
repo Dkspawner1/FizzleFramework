@@ -6,7 +6,6 @@
 #include <Graphics/Color.h>
 #include <Graphics/Window.h>
 
-#include "Content/SpriteFont.h"
 #include "Content/Texture.h"
 
 class Renderer {
@@ -23,11 +22,13 @@ public:
 
     void SetClearColor(const Color &color) const;
 
+
     void DrawTexture(const Texture &texture, const Rectangle &destRect, const Color &color) const;
+    void DrawTexture(const Texture &texture, const Rectangle &srcRect, const Rectangle &destRect, const Color &color) const;
 
     void DrawRectangle(const Rectangle &destRect, const Color &color) const;
-private:
 
+private:
     // Function to convert pixel coordinates to normalized device coordinates
     void ConvertToNormalizedDeviceCoordinates(const Rectangle &rect, int windowWidth, int windowHeight,
                                               float &outX, float &outY, float &outWidth, float &outHeight) const;
