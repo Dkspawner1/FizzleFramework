@@ -1,6 +1,8 @@
 #include <Content/ContentManager.h>
 #include <Content/TypedAsset.h>
 
+#include "Graphics/Font.h"
+
 template<typename T>
 std::future<T*> ContentManager::ClaimAssetAsync(const std::string& assetName) {
     return std::async(std::launch::async, [this, assetName]() {
@@ -12,7 +14,11 @@ template<typename T>
 T* ContentManager::ClaimAsset(const std::string& assetName) {
     if (const auto it = m_assets.find(assetName); it == m_assets.end()) {
         std::unique_ptr<T> asset;
+        if constexpr (std::is_same_v<T, Font>) {
+            asset = std::make_unique<T>(assetName, GetAssetPath(assetName), 24); // Use appropriate font size
+        } else {
             asset = std::make_unique<T>(assetName, GetAssetPath(assetName));
+        }
         T* rawPtr = asset.get();
         m_assets[assetName] = std::make_pair(std::move(asset), 1);
         return rawPtr;
@@ -46,8 +52,8 @@ void ContentManager::UnloadAll() {
 
 // Explicit template instantiations
 template std::future<Texture*> ContentManager::ClaimAssetAsync<Texture>(const std::string&);
-// template std::future<SpriteFont*> ContentManager::ClaimAssetAsync<SpriteFont>(const std::string&);
 template Texture* ContentManager::ClaimAsset<Texture>(const std::string&);
-// template SpriteFont* ContentManager::ClaimAsset<SpriteFont>(const std::string&);
 template Texture* ContentManager::Get<Texture>(const std::string&);
-// template SpriteFont* ContentManager::Get<SpriteFont>(const std::string&);
+template std::future<Font*> ContentManager::ClaimAssetAsync<Font>(const std::string&);
+template Font* ContentManager::ClaimAsset<Font>(const std::string&);
+template Font* ContentManager::Get<Font>(const std::string&);

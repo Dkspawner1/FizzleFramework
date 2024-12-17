@@ -7,6 +7,7 @@
 class Texture final : public Asset {
 public:
     Texture(const std::string& name, const std::string& path);
+    Texture(const std::string& name, unsigned char* buffer, int width, int height);
     ~Texture() override;
 
     void Bind() const;

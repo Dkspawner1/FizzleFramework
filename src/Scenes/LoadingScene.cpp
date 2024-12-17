@@ -1,20 +1,15 @@
 #include <Scenes/LoadingScene.h>
 #include <iostream>
 
+#include "Graphics/Font.h"
+
 
 void LoadingScene::Initialize() {
-    m_fonts.push_back("tf.fnt");
+    m_font = m_game->GetContentManager()->ClaimAsset<Font>("arial.ttf");
 }
 
 void LoadingScene::LoadContent() {
-    for (const auto &font: m_fonts) {
-        try {
-            // m_game->GetContentManager()->ClaimAsset<SpriteFont>(font);
-            std::cout << "Font " << font << " loaded successfully" << std::endl;
-        } catch (const std::exception &e) {
-            std::cerr << "Failed to load font " << font << ": " << e.what() << std::endl;
-        }
-    }
+
 }
 
 void LoadingScene::Update(GameTime &gameTime) {
@@ -33,26 +28,22 @@ void LoadingScene::Update(GameTime &gameTime) {
 void LoadingScene::Draw() {
     m_game->GetSpriteBatch()->Begin();
 
-    // Draw loading text
     std::cout << "Loading... " << static_cast<int>(m_progress * 100) << "%\n";
 
     // Draw progress bar (example)
-    float barWidth = 400; // Width of the progress bar
-    float filledWidth = barWidth * m_progress; // Width of filled part based on progress
+    float barWidth = 400;
+    float filledWidth = barWidth * m_progress;
 
-    // Draw filled part of the bar (you would replace this with actual drawing code)
     std::cout << "[" << std::string(static_cast<int>(filledWidth / 4), '=')
             << std::string(static_cast<int>((barWidth - filledWidth) / 4), ' ')
             << "]\n";
-    // if (SpriteFont const *font = m_game->GetContentManager()->Get<SpriteFont>(m_fonts[0])) {
-    //     // font->DrawString("This is a test!", 100.0f, 100.0f, Color::Black);
-    //     m_game->GetSpriteBatch()->DrawString(*font, "THIS IS A TEST!!!", 100, 100, Color::Black);
-    // }
+
+    m_game->GetSpriteBatch()->DrawString(*m_font, "Hello, World!", 100, 100, 1.0f, Color::White);
+
     m_game->GetSpriteBatch()->End();
 }
 
 void LoadingScene::UnloadContent() {
-    // Unload any content specific to this scene if necessary
 }
 
 void LoadingScene::SetProgress(float progress) {

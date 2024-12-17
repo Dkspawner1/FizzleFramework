@@ -5,6 +5,8 @@
 #include <Graphics/Renderer.h>
 #include <Content/Texture.h>
 
+#include "Font.h"
+
 
 class SpriteBatch {
 public:
@@ -22,9 +24,7 @@ public:
     // Draws a colored rectangle
     void Draw(const Rectangle &destRect, const Color &color) const;
 
-    // Draws text to the screen with a provided font: *.fnt& | .*tga
-    // void DrawString(const SpriteFont &font, const std::string &text, float x, float y, const Color &color);
-
+    void DrawString(const Font& font, const std::string& text, float x, float y, float scale, const Color& color);
 private:
     Renderer *m_renderer;
     bool m_isDrawing;
