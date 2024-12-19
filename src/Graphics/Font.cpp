@@ -26,18 +26,25 @@ Font::~Font() {
 }
 
 void Font::LoadCharacters() {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
     for (unsigned char c = 0; c < 128; c++) {
         if (FT_Load_Char(m_face, c, FT_LOAD_RENDER)) {
             std::cerr << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
             continue;
         }
 
-        auto* texture = new Texture(std::string(1, c), m_face->glyph->bitmap.buffer,
-                                 m_face->glyph->bitmap.width, m_face->glyph->bitmap.rows);
+        auto* texture = new Texture(std::string(1, c),
+                                  m_face->glyph->bitmap.buffer,
+                                  m_face->glyph->bitmap.width,
+                                  m_face->glyph->bitmap.rows);
+
         Character character = {
             texture,
-            {static_cast<int>(m_face->glyph->bitmap.width), static_cast<int>(m_face->glyph->bitmap.rows)},
-            {(m_face->glyph->bitmap_left), (m_face->glyph->bitmap_top)},
+            {static_cast<int>(m_face->glyph->bitmap.width),
+             static_cast<int>(m_face->glyph->bitmap.rows)},
+            {m_face->glyph->bitmap_left,
+             m_face->glyph->bitmap_top},
             static_cast<unsigned int>(m_face->glyph->advance.x)
         };
 

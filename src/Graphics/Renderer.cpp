@@ -306,19 +306,21 @@ void Renderer::DrawFontTexture(const Texture& texture, const Rectangle& srcRect,
 
     // Flip the Y coordinates to correct text orientation
     const std::array<float, 8> vertices = {
-        normalizedX, normalizedY - normalizedHeight,  // bottom-left
+        normalizedX, normalizedY,                      // top-left
+        normalizedX + normalizedWidth, normalizedY,    // top-right
         normalizedX + normalizedWidth, normalizedY - normalizedHeight,  // bottom-right
-        normalizedX + normalizedWidth, normalizedY,  // top-right
-        normalizedX, normalizedY  // top-left
+        normalizedX, normalizedY - normalizedHeight    // bottom-left
     };
 
+    // Updated texture coordinates for correct orientation
     // Correct texture coordinates for proper glyph rendering
     const std::array<float, 8> texCoords = {
-        0.0f, 1.0f,  // bottom-left
-        1.0f, 1.0f,  // bottom-right
+        0.0f, 0.0f,  // top-left
         1.0f, 0.0f,  // top-right
-        0.0f, 0.0f   // top-left
+        1.0f, 1.0f,  // bottom-right
+        0.0f, 1.0f   // bottom-left
     };
+
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);

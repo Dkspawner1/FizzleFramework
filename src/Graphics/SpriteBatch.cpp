@@ -43,10 +43,15 @@ void SpriteBatch::DrawString(const Font& font, const std::string& text,
     }
 
     const auto& characters = font.GetCharacters();
+    float baselineY = y; // Store the baseline y-position
+
     for (char c : text) {
         const Character& ch = characters.at(c);
+
+        // Calculate position with proper baseline alignment
         float xpos = x + ch.Bearing[0] * scale;
-        float ypos = y - (ch.Size[1] - ch.Bearing[1]) * scale;
+        float ypos = baselineY - ch.Bearing[1] * scale; // Subtract bearing from baseline
+
         float w = ch.Size[0] * scale;
         float h = ch.Size[1] * scale;
 
