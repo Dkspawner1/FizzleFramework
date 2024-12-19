@@ -6,8 +6,7 @@
 #include FT_FREETYPE_H
 #include <unordered_map>
 #include <Graphics/Color.h>
-
-#include "Content/Texture.h"
+#include <Content/Texture.h>
 
 struct Character {
     Texture* texture;

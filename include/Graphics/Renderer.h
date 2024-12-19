@@ -5,7 +5,7 @@
 #include <glad/glad.h>
 #include <Graphics/Color.h>
 #include <Graphics/Window.h>
-#include "Content/Texture.h"
+#include <Content/Texture.h>
 
 class Renderer {
 public:

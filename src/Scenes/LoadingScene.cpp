@@ -1,19 +1,18 @@
 #include <Scenes/LoadingScene.h>
 #include <iostream>
-
-#include "Graphics/Font.h"
+#include <Graphics/Font.h>
 
 
 void LoadingScene::Initialize() {
-    m_font = m_game->GetContentManager()->ClaimAsset<Font>("Fonts/DMSans-Variable.ttf");
 }
 
 void LoadingScene::LoadContent() {
+    m_font = m_game->GetContentManager()->ClaimAsset<Font>("Fonts/DMSans-Variable.ttf");
 }
 
 void LoadingScene::Update(GameTime &gameTime) {
     if (m_progress < 1.0f) {
-        m_progress += 0.0025f;
+        m_progress += 0.010f;
         if (m_progress >= 1.0f) {
             m_finished = true;
         }
@@ -25,7 +24,7 @@ void LoadingScene::Update(GameTime &gameTime) {
 
 void LoadingScene::DrawLoadingBar() const {
     if (!m_game || !m_game->GetGraphicsDeviceManager() || !m_game->GetSpriteBatch()) {
-        return;  // Early exit if any pointer is null
+        return; // Early exit if any pointer is null
     }
 
     const auto &graphicsDevice = m_game->GetGraphicsDeviceManager();
@@ -48,8 +47,8 @@ void LoadingScene::DrawLoadingBar() const {
     spriteBatch->Draw(barBg, Color(200, 200, 200));
 
     // Draw progress fill (white)
-    float fillWidth = barWidth * m_progress;
-    Rectangle barFill(barX, barY, fillWidth, barHeight);
+    const float fillWidth = barWidth * m_progress;
+    const Rectangle barFill(barX, barY, fillWidth, barHeight);
     spriteBatch->Draw(barFill, Color::White);
 
     // Format and draw percentage text
@@ -60,14 +59,13 @@ void LoadingScene::DrawLoadingBar() const {
 
 void LoadingScene::Draw() {
     if (!m_game || !m_game->GetSpriteBatch()) {
-        return;  // Early exit if game or spriteBatch is null
+        return; // Early exit if game or spriteBatch is null
     }
 
     m_game->GetSpriteBatch()->Begin();
     DrawLoadingBar();
     m_game->GetSpriteBatch()->End();
 }
-
 
 void LoadingScene::UnloadContent() {
     if (m_game && m_game->GetContentManager()) {

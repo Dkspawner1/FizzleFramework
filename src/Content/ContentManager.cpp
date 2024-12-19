@@ -1,7 +1,6 @@
     #include <Content/ContentManager.h>
     #include <Content/TypedAsset.h>
-
-    #include "Graphics/Font.h"
+    #include <Graphics/Font.h>
 
     template<typename T>
     std::future<T*> ContentManager::ClaimAssetAsync(const std::string& assetName) {

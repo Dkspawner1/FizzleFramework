@@ -4,8 +4,7 @@
 #include <Core/Rectangle.h>
 #include <Graphics/Renderer.h>
 #include <Content/Texture.h>
-
-#include "Font.h"
+#include <Graphics/Font.h>
 
 
 class SpriteBatch {

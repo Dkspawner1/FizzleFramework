@@ -3,8 +3,7 @@
 
 #include <GLFW/glfw3.h>
 #include <unordered_map>
-
-#include "Rectangle.h"
+#include <Core/Rectangle.h>
 
 enum class MouseState {
     LEFT_BUTTON,

@@ -1,8 +1,7 @@
 #include <iostream>
 #include <thread>
 #include <Core/Game.h>
-
-#include "Scenes/SceneManager.h"
+#include <Scenes/SceneManager.h>
 
 Game::Game() : m_sceneManager(std::make_unique<SceneManager>(this)),
                m_graphics(std::make_unique<GraphicsDeviceManager>("FizzleFramework", 1600, 900)),
