@@ -15,8 +15,7 @@ void SceneManager::InitializeSceneFactories() {
 }
 
 void SceneManager::ChangeScene(const std::string& sceneType) {
-    auto it = m_sceneFactories.find(sceneType);
-    if (it != m_sceneFactories.end()) {
+    if (const auto it = m_sceneFactories.find(sceneType); it != m_sceneFactories.end()) {
         if (m_currentScene) {
             m_currentScene->UnloadContent();
         }
@@ -28,13 +27,13 @@ void SceneManager::ChangeScene(const std::string& sceneType) {
     }
 }
 
-void SceneManager::Update(GameTime& gameTime) {
+void SceneManager::Update(GameTime& gameTime) const {
     if (m_currentScene) {
         m_currentScene->Update(gameTime);
     }
 }
 
-void SceneManager::Draw() {
+void SceneManager::Draw() const {
     if (m_currentScene) {
         m_currentScene->Draw();
     }

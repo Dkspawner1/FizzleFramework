@@ -10,8 +10,8 @@ class SceneManager {
 public:
     explicit SceneManager(Game* game);
     void ChangeScene(const std::string& sceneType);
-    void Update(GameTime& gameTime);
-    void Draw();
+    void Update(GameTime& gameTime) const;
+    void Draw() const;
 
 
 private:

@@ -4,12 +4,20 @@
 #include <freetype.h>
 #include <Scenes/Scene.h>
 #include <Game/Game1.h>
-
+#include <sstream>
+#include <iomanip>
 #include "Graphics/Font.h"
 
 class LoadingScene final : public Scene {
 public:
-    explicit LoadingScene(Game *game) : Scene(game) {
+    explicit LoadingScene(Game *game)
+       : Scene(game)
+       , m_font(nullptr)
+       , m_progress(0.0f)
+       , m_finished(false) {
+        if (!game) {
+            throw std::runtime_error("Invalid game pointer");
+        }
     }
 
     void Initialize() override;
@@ -31,8 +39,8 @@ private:
     float m_progress; // Current loading progress (0.0 to 1.0)
     bool m_finished = false;
     std::string m_text;
-    FT_Library m_ft;
-    FT_Face m_face;
+
+    void DrawLoadingBar() const;
 };
 
 #endif // LOADINGSCENE_H

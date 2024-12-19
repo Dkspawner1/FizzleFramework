@@ -2,8 +2,14 @@
 #include <Graphics/Renderer.h>
 #include <stdexcept>
 
-Renderer::Renderer(Window *window) : m_window(window), m_vao(0), m_vbo(0), m_textureShaderProgram(0) {
-    // Don't perform OpenGL operations here
+Renderer::Renderer(Window *window)
+    : m_window(window)
+      , m_vao(0)
+      , m_vbo(0)
+      , m_texCoordVbo(0)
+      , m_textureShaderProgram(0)
+      , m_fontShaderProgram(0)
+      , m_whiteTexture(0) {
 }
 
 Renderer::~Renderer() {
@@ -11,8 +17,14 @@ Renderer::~Renderer() {
         glDeleteVertexArrays(1, &m_vao);
     if (m_vbo != 0)
         glDeleteBuffers(1, &m_vbo);
+    if (m_texCoordVbo != 0)
+        glDeleteBuffers(1, &m_texCoordVbo);
     if (m_textureShaderProgram != 0)
         glDeleteProgram(m_textureShaderProgram);
+    if (m_fontShaderProgram != 0)
+        glDeleteProgram(m_fontShaderProgram);
+    if (m_whiteTexture != 0)
+        glDeleteTextures(1, &m_whiteTexture);
 }
 
 void Renderer::Initialize() {
@@ -20,26 +32,33 @@ void Renderer::Initialize() {
     glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
     glGenBuffers(1, &m_texCoordVbo);
+    glGenTextures(1, &m_whiteTexture);
 
     glBindVertexArray(m_vao);
 
     // Position attribute setup
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), static_cast<void *>(nullptr));
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
     glEnableVertexAttribArray(0);
 
     // Texture coordinate attribute setup
     glBindBuffer(GL_ARRAY_BUFFER, m_texCoordVbo);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), static_cast<void *>(nullptr));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
     glEnableVertexAttribArray(1);
 
-    // Regular texture shader setup
+    // Create white texture for rectangle drawing
+    glBindTexture(GL_TEXTURE_2D, m_whiteTexture);
+    unsigned char white[] = {255, 255, 255, 255};
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, white);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Shader compilation
     const char *vertexShaderSource = R"(
         #version 330 core
         layout (location = 0) in vec2 aPos;
         layout (location = 1) in vec2 aTexCoord;
         out vec2 TexCoords;
-
         void main() {
             gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);
             TexCoords = aTexCoord;
@@ -52,92 +71,66 @@ void Renderer::Initialize() {
         out vec4 FragColor;
         uniform sampler2D texture1;
         uniform vec4 color;
-
         void main() {
             vec4 texColor = texture(texture1, TexCoords);
             FragColor = texColor * color;
         }
     )";
 
-    // Font shader setup
-    const char *fontVertexShaderSource = R"(
+    const char *fontFragmentShaderSource = R"(
         #version 330 core
-        layout (location = 0) in vec2 aPos;
-        layout (location = 1) in vec2 aTexCoord;
-        out vec2 TexCoords;
-
+        in vec2 TexCoords;
+        out vec4 FragColor;
+        uniform sampler2D text;
+        uniform vec4 textColor;
         void main() {
-            gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);
-            TexCoords = aTexCoord;
+            vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);
+            FragColor = textColor * sampled;
         }
     )";
 
-    const char *fontFragmentShaderSource = R"(
-    #version 330 core
-    in vec2 TexCoords;
-    out vec4 FragColor;
-
-    uniform sampler2D text;
-    uniform vec4 textColor;
-
-    void main() {
-        vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);
-        FragColor = textColor * sampled;
-    }
-)";
-
-    // Compile regular texture shaders
+    // Compile shaders
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
     glCompileShader(vertexShader);
-    CheckShaderCompilation(vertexShader, "Texture Vertex");
+    CheckShaderCompilation(vertexShader, "Vertex");
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
     glCompileShader(fragmentShader);
-    CheckShaderCompilation(fragmentShader, "Texture Fragment");
-
-    // Create and link texture shader program
-    m_textureShaderProgram = glCreateProgram();
-    glAttachShader(m_textureShaderProgram, vertexShader);
-    glAttachShader(m_textureShaderProgram, fragmentShader);
-    glLinkProgram(m_textureShaderProgram);
-    CheckProgramLinking(m_textureShaderProgram);
-
-    // Clean up texture shaders
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    // Compile font shaders
-    GLuint fontVertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(fontVertexShader, 1, &fontVertexShaderSource, nullptr);
-    glCompileShader(fontVertexShader);
-    CheckShaderCompilation(fontVertexShader, "Font Vertex");
+    CheckShaderCompilation(fragmentShader, "Fragment");
 
     GLuint fontFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fontFragmentShader, 1, &fontFragmentShaderSource, nullptr);
     glCompileShader(fontFragmentShader);
     CheckShaderCompilation(fontFragmentShader, "Font Fragment");
 
-    // Create and link font shader program
+    // Create and link shader programs
+    m_textureShaderProgram = glCreateProgram();
+    glAttachShader(m_textureShaderProgram, vertexShader);
+    glAttachShader(m_textureShaderProgram, fragmentShader);
+    glLinkProgram(m_textureShaderProgram);
+    CheckProgramLinking(m_textureShaderProgram);
+
     m_fontShaderProgram = glCreateProgram();
-    glAttachShader(m_fontShaderProgram, fontVertexShader);
+    glAttachShader(m_fontShaderProgram, vertexShader);
     glAttachShader(m_fontShaderProgram, fontFragmentShader);
     glLinkProgram(m_fontShaderProgram);
     CheckProgramLinking(m_fontShaderProgram);
 
-    // Clean up font shaders
-    glDeleteShader(fontVertexShader);
+    // Cleanup shaders
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
     glDeleteShader(fontFragmentShader);
 
-    // Set default texture units
+    // Set texture units
     glUseProgram(m_textureShaderProgram);
     glUniform1i(glGetUniformLocation(m_textureShaderProgram, "texture1"), 0);
 
     glUseProgram(m_fontShaderProgram);
     glUniform1i(glGetUniformLocation(m_fontShaderProgram, "text"), 0);
 
-    // Enable blending for transparency
+    // Enable blending
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
@@ -249,17 +242,17 @@ void Renderer::DrawTexture(const Texture &texture, const Rectangle &srcRect, con
 }
 
 void Renderer::DrawRectangle(const Rectangle &destRect, const Color &color) const {
-    float normalizedX;
-    float normalizedY;
-    float normalizedWidth;
-    float normalizedHeight;
+    if (!m_window) return;
 
-    // Get the window dimensions
+    float normalizedX, normalizedY, normalizedWidth, normalizedHeight;
+
     int windowWidth = m_window->GetWidth();
     int windowHeight = m_window->GetHeight();
-    // Convert rectangle coordinates to normalized device coordinates
-    ConvertToNormalizedDeviceCoordinates(destRect, windowWidth, windowHeight, normalizedX, normalizedY, normalizedWidth,
-                                         normalizedHeight);
+
+    ConvertToNormalizedDeviceCoordinates(destRect, windowWidth, windowHeight,
+                                         normalizedX, normalizedY,
+                                         normalizedWidth, normalizedHeight);
+
     const std::array<float, 8> vertices = {
         normalizedX, normalizedY,
         normalizedX + normalizedWidth, normalizedY,
@@ -267,14 +260,28 @@ void Renderer::DrawRectangle(const Rectangle &destRect, const Color &color) cons
         normalizedX, normalizedY - normalizedHeight
     };
 
+    const std::array<float, 8> texCoords = {
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
+    };
+
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
 
+    glBindBuffer(GL_ARRAY_BUFFER, m_texCoordVbo);
+    glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(float), texCoords.data(), GL_DYNAMIC_DRAW);
+
+    glBindTexture(GL_TEXTURE_2D, m_whiteTexture);
     glUseProgram(m_textureShaderProgram);
 
-    // Set color uniform
-    glUniform4f(glGetUniformLocation(m_textureShaderProgram, "color"), color.GetR(), color.GetG(), color.GetB(),
-                color.GetA());
+    // Normalize color values
+    glUniform4f(glGetUniformLocation(m_textureShaderProgram, "color"),
+                color.GetR() / 255.0f,
+                color.GetG() / 255.0f,
+                color.GetB() / 255.0f,
+                color.GetA() / 255.0f);
 
     glBindVertexArray(m_vao);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
@@ -293,32 +300,32 @@ void Renderer::ConvertToNormalizedDeviceCoordinates(const Rectangle &rect, int w
     outHeight = rect.GetHeight() / (windowHeight / 2.0f);
 }
 
-void Renderer::DrawFontTexture(const Texture& texture, const Rectangle& srcRect,
-                             const Rectangle& destRect, const Color& color) const {
+void Renderer::DrawFontTexture(const Texture &texture, const Rectangle &srcRect,
+                               const Rectangle &destRect, const Color &color) const {
     float normalizedX, normalizedY, normalizedWidth, normalizedHeight;
 
     int windowWidth = m_window->GetWidth();
     int windowHeight = m_window->GetHeight();
 
     ConvertToNormalizedDeviceCoordinates(destRect, windowWidth, windowHeight,
-                                       normalizedX, normalizedY,
-                                       normalizedWidth, normalizedHeight);
+                                         normalizedX, normalizedY,
+                                         normalizedWidth, normalizedHeight);
 
     // Flip the Y coordinates to correct text orientation
     const std::array<float, 8> vertices = {
-        normalizedX, normalizedY,                      // top-left
-        normalizedX + normalizedWidth, normalizedY,    // top-right
-        normalizedX + normalizedWidth, normalizedY - normalizedHeight,  // bottom-right
-        normalizedX, normalizedY - normalizedHeight    // bottom-left
+        normalizedX, normalizedY, // top-left
+        normalizedX + normalizedWidth, normalizedY, // top-right
+        normalizedX + normalizedWidth, normalizedY - normalizedHeight, // bottom-right
+        normalizedX, normalizedY - normalizedHeight // bottom-left
     };
 
     // Updated texture coordinates for correct orientation
     // Correct texture coordinates for proper glyph rendering
     const std::array<float, 8> texCoords = {
-        0.0f, 0.0f,  // top-left
-        1.0f, 0.0f,  // top-right
-        1.0f, 1.0f,  // bottom-right
-        0.0f, 1.0f   // bottom-left
+        0.0f, 0.0f, // top-left
+        1.0f, 0.0f, // top-right
+        1.0f, 1.0f, // bottom-right
+        0.0f, 1.0f // bottom-left
     };
 
 

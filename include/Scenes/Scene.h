@@ -5,7 +5,7 @@
 
 class Scene {
 public:
-    explicit Scene(Game* game)  : m_game(game){}
+    explicit Scene(Game* game) : m_game(game){}
 
     virtual ~Scene() = default;
 
