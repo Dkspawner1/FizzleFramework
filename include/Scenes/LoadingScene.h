@@ -30,6 +30,7 @@ private:
     Font *m_font;
     float m_progress; // Current loading progress (0.0 to 1.0)
     bool m_finished = false;
+    std::string m_text;
     FT_Library m_ft;
     FT_Face m_face;
 };

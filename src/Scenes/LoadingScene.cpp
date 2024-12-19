@@ -9,7 +9,6 @@ void LoadingScene::Initialize() {
 }
 
 void LoadingScene::LoadContent() {
-
 }
 
 void LoadingScene::Update(GameTime &gameTime) {
@@ -37,8 +36,8 @@ void LoadingScene::Draw() {
     std::cout << "[" << std::string(static_cast<int>(filledWidth / 4), '=')
             << std::string(static_cast<int>((barWidth - filledWidth) / 4), ' ')
             << "]\n";
-
-    m_game->GetSpriteBatch()->DrawString(*m_font, std::to_string(m_progress), 100, 100, 1.0f, Color::Black);
+    m_text = std::move(std::to_string(m_progress));
+    m_game->GetSpriteBatch()->DrawString(*m_font, m_text, 100, 100, 1.0f, Color::Black);
 
     m_game->GetSpriteBatch()->End();
 }
