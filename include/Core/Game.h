@@ -11,19 +11,26 @@ class SceneManager; // Forward declaration
 
 class Game {
 public:
-    ContentManager* GetContentManager() const { return m_contentManager.get(); }
-    GraphicsDeviceManager* GetGraphicsDeviceManager() const { return m_graphics.get(); }
-    SpriteBatch* GetSpriteBatch() const { return m_spriteBatch.get(); }
-    SceneManager* GetSceneManager() const { return m_sceneManager.get(); }
+    ContentManager *GetContentManager() const { return m_contentManager.get(); }
+    GraphicsDeviceManager *GetGraphicsDeviceManager() const { return m_graphics.get(); }
+    SpriteBatch *GetSpriteBatch() const { return m_spriteBatch.get(); }
+    SceneManager *GetSceneManager() const { return m_sceneManager.get(); }
+
+    void Exit();
 
 protected:
     Game();
+
     virtual ~Game();
 
     virtual void Run();
+
     virtual void Initialize();
+
     virtual void LoadContent();
-    virtual void Update(GameTime& gameTime);
+
+    virtual void Update(GameTime &gameTime);
+
     virtual void Draw();
 
     std::unique_ptr<SceneManager> m_sceneManager;

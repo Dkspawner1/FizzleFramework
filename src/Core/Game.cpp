@@ -11,6 +11,10 @@ Game::Game() : m_sceneManager(std::make_unique<SceneManager>(this)),
 
 Game::~Game() = default;
 
+void Game::Exit() {
+std::cout <<"Exit called" << std::endl;
+}
+
 void Game::Run() {
     Initialize();
     LoadContent();

@@ -1,9 +1,22 @@
 #include <Scenes/MenuScene.h>
 #include <iostream>
+#include <ranges>
 
 void MenuScene::Initialize() {
     m_inputManager = std::make_unique<InputManager>(m_game->GetGraphicsDeviceManager()->GetWindow()->GetGLFWWindow());
-    m_textureNames.push_back("fizzle.png");
+    m_textureNames.push_back("textures/fizzle.png");
+    m_rectangles.push_back(Rectangle(600, 600, 200, 150));
+
+    constexpr int StartX = 5, StartY = 125, incrementValue = 125;
+
+    for (int i = 0; i < 3; i++) {
+        m_textureNames.push_back(std::format("textures/btn{}.png", i));
+        m_rectangles.push_back(Rectangle(StartX, StartY + (i * incrementValue), 200, 100));
+    }
+
+    m_buttonCallbacks.push_back([this](int) { m_game->GetSceneManager()->ChangeScene("Game"); });
+    m_buttonCallbacks.push_back([this](int) { m_game->GetSceneManager()->ChangeScene("Options"); });
+    m_buttonCallbacks.push_back([this](int) { m_game->Exit(); });
 }
 
 void MenuScene::LoadContent() {
@@ -26,24 +39,28 @@ void MenuScene::Update(GameTime &gameTime) {
         std::cout << "Main thread: Mouse button left is pressed" << std::endl;
     }
 
-    auto mouseRect = m_inputManager->GetMousePosition();
+    auto mousePos = m_inputManager->GetMousePosition();
+    Rectangle mouseRect(mousePos.GetX(), mousePos.GetY(), 1, 1);
 
-    if (mouseRect.intersects(m_texRect)) {
-        m_texColor = Color::DarkGray;
-        if (m_inputManager->IsMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
-            m_texColor = Color::Gray; // Change color on click
+    for (int i = 1; i < 4; i++) { // Start from index 1 to skip the first texture
+        if (m_rectangles[i].intersects(mouseRect)) {
+            if (m_inputManager->IsMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
+                // Button is clicked, call the corresponding callback
+                if (auto it = std::next(m_buttonCallbacks.begin(), i - 1); it != m_buttonCallbacks.end()) {
+                    (*it)(i - 1);
+                }
+            }
         }
-    } else {
-        m_texColor = Color::White;
     }
 }
 
 void MenuScene::Draw() {
     m_game->GetSpriteBatch()->Begin();
 
-    for (const auto &textureName: m_textureNames) {
+    for (const auto &[textureName, rect]: std::views::zip(m_textureNames, m_rectangles)) {
+        Color drawColor = (textureName == m_textureNames[0]) ? Color::White : m_textureColor; // Default color for non-button textures
         if (Texture const *texture = m_game->GetContentManager()->Get<Texture>(textureName)) {
-            m_game->GetSpriteBatch()->Draw(*texture, m_texRect, m_texColor);
+            m_game->GetSpriteBatch()->Draw(*texture, rect, drawColor);
         } else {
             std::cout << "Texture " << textureName << " not found" << std::endl;
         }

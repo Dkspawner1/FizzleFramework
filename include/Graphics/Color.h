@@ -12,12 +12,20 @@ public:
     static constexpr Color FromPredefined(const Color &predefined) {
         return predefined;
     }
+    
 
     [[nodiscard]] uint8_t GetR() const { return m_r; }
     [[nodiscard]] uint8_t GetG() const { return m_g; }
     [[nodiscard]] uint8_t GetB() const { return m_b; }
     [[nodiscard]] uint8_t GetA() const { return m_a; }
 
+    bool operator!=(const Color& other) const {
+        return m_r != other.m_r || m_g != other.m_g || m_b != other.m_b || m_a != other.m_a;
+    }
+
+    bool operator==(const Color& other) const {
+        return m_r == other.m_r && m_g == other.m_g && m_b == other.m_b && m_a == other.m_a;
+    }
     // Predefined Colors (declarations)
     static const Color Black;
     static const Color CornflowerBlue;
