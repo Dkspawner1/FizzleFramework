@@ -1,7 +1,12 @@
 #ifndef LOADINGSCENE_H
 #define LOADINGSCENE_H
 
+#ifdef _WIN32
 #include <freetype.h>
+#else
+#include <freetype/freetype.h>
+#endif
+
 #include <Scenes/Scene.h>
 #include <Game/Game1.h>
 #include <sstream>

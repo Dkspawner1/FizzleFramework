@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.12)
 project(FizzleFramework)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -6,13 +6,8 @@ set(CMAKE_CXX_STANDARD 23)
 # Find GLFW package
 find_package(glfw3 REQUIRED)
 
-# Add FreeType
-set(FREETYPE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/External/freetype")
-set(FREETYPE_LIBRARY "${CMAKE_SOURCE_DIR}/lib/freetype.lib")
-
-if(NOT EXISTS ${FREETYPE_LIBRARY})
-    message(FATAL_ERROR "FreeType library not found at ${FREETYPE_LIBRARY}")
-endif()
+# Find FreeType package
+find_package(Freetype REQUIRED)
 
 # Add GLAD
 add_library(glad STATIC External/glad/glad.c)
@@ -45,30 +40,36 @@ target_include_directories(FizzleFramework PRIVATE
         External
 )
 
-# Link libraries based on the operating system
+# Find OpenGL package
+find_package(OpenGL REQUIRED)
+
+# Link libraries
+target_link_libraries(FizzleFramework PRIVATE
+        glfw
+        glad
+        ${OPENGL_LIBRARIES}
+        Freetype::Freetype
+)
+
+# Platform-specific configurations
 if(WIN32)
     target_link_libraries(FizzleFramework PRIVATE
-            glfw
-            glad
-            opengl32
             gdi32
             user32
             kernel32
-            ${FREETYPE_LIBRARY}
     )
-elseif(UNIX)
+elseif(UNIX AND NOT APPLE)
     target_link_libraries(FizzleFramework PRIVATE
-            glfw
-            glad
-            GL
-            ${FREETYPE_LIBRARY}
+            dl
+            pthread
     )
 endif()
 
-# Copy DLLs to output directory
-add_custom_command(TARGET FizzleFramework POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_SOURCE_DIR}/lib/glfw3.dll"
-        "${CMAKE_SOURCE_DIR}/lib/freetype.dll"
-        $<TARGET_FILE_DIR:FizzleFramework>
-)
+# Copy DLLs to output directory (Windows only)
+if(WIN32)
+    add_custom_command(TARGET FizzleFramework POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_SOURCE_DIR}/lib/glfw3.dll"
+            $<TARGET_FILE_DIR:FizzleFramework>
+    )
+endif()
