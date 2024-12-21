@@ -12,11 +12,15 @@ void MenuScene::Initialize() {
     for (int i = 0; i < 3; i++) {
         m_textureNames.push_back(std::format("Textures/btn{}.png", i));
         m_rectangles.push_back(Rectangle(StartX, StartY + (i * incrementValue), 200, 100));
+        m_buttonColors.push_back(Color::White);
     }
 
     m_buttonCallbacks.push_back([this](int) { m_game->GetSceneManager()->ChangeScene("Game"); });
-    m_buttonCallbacks.push_back([this](int) { m_game->GetSceneManager()->ChangeScene("Options"); });
-    m_buttonCallbacks.push_back([this](int) { m_game->Exit(); });
+    m_buttonCallbacks.push_back([this](int) { m_game->GetSceneManager()->ChangeScene("Game"); });
+    m_buttonCallbacks.push_back([this](int) {
+        m_game->Exit();
+std::exit(1);
+    });
 }
 
 void MenuScene::LoadContent() {
@@ -45,24 +49,29 @@ void MenuScene::Update(GameTime &gameTime) {
     for (int i = 1; i < 4; i++) {
         // Start from index 1 to skip the first texture
         if (m_rectangles[i].intersects(mouseRect)) {
+
+            m_buttonColors[i] = Color::DarkGray;
+
             if (m_inputManager->IsMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
                 // Button is clicked, call the corresponding callback
+                m_buttonColors[i] = Color::Gray;
                 if (auto it = std::next(m_buttonCallbacks.begin(), i - 1); it != m_buttonCallbacks.end()) {
                     (*it)(i - 1);
                 }
             }
         }
+        else
+            m_buttonColors[i] = Color::White;
     }
 }
+
 
 void MenuScene::Draw() {
     m_game->GetSpriteBatch()->Begin();
 
     for (const auto &[textureName, rect]: std::views::zip(m_textureNames, m_rectangles)) {
-        Color drawColor = (textureName == m_textureNames[0]) ? Color::White : m_textureColor;
-        // Default color for non-button textures
         if (Texture const *texture = m_game->GetContentManager()->Get<Texture>(textureName)) {
-            m_game->GetSpriteBatch()->Draw(*texture, rect, drawColor);
+            m_game->GetSpriteBatch()->Draw(*texture, rect, m_buttonColors[0]);
         } else {
             std::cout << "Texture " << textureName << " not found" << std::endl;
         }

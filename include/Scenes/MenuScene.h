@@ -26,7 +26,7 @@ private:
     std::unique_ptr<InputManager> m_inputManager;
     Color m_textureColor = Color::White;
     std::vector<std::string> m_textureNames;
-
+    std::vector<Color> m_buttonColors;
     std::vector<Rectangle> m_rectangles;
     std::list<std::function<void(int)> > m_buttonCallbacks;
 };

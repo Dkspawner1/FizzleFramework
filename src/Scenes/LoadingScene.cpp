@@ -12,7 +12,7 @@ void LoadingScene::LoadContent() {
 
 void LoadingScene::Update(GameTime &gameTime) {
     if (m_progress < 1.0f) {
-        m_progress += 0.010f;
+        m_progress += 0.0750f;
         if (m_progress >= 1.0f) {
             m_finished = true;
         }
