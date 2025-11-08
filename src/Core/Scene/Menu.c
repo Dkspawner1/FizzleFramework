@@ -6,10 +6,8 @@
 #include <Scene/Scene.h>
 #include <SDL3/SDL_render.h>
 
-// Helper to build absolute asset path
-// Helper to build asset path
 static const char *get_asset_path(const char *filename) {
-    static char paths[8][1024];
+    static char paths[8][512];
     static int index = 0;
 
     if (!filename) {
@@ -18,14 +16,12 @@ static const char *get_asset_path(const char *filename) {
     }
 
     index = (index + 1) % 8;
-
-    // ASSETS_DIR is now the absolute path from CMake
-    // e.g., C:/Users/dorll/CLionProjects/FizzleFramework/cmake-build-debug/assets
     snprintf(paths[index], sizeof(paths[index]), "%s/%s", ASSETS_DIR, filename);
 
-    LOG_DEBUG("Full asset path: %s", paths[index]);
+    LOG_DEBUG("Asset path: %s", paths[index]);
     return paths[index];
 }
+
 
 
 void MenuScene_Create(void) {
@@ -47,20 +43,20 @@ void MenuScene_LoadAssets(AssetManager *asset_manager) {
     LOG_INFO("Queuing Menu assets for async loading...");
 
     // Queue all textures for async loading
-    AssetManager_LoadTextureAsync(asset_manager,
-                                  get_asset_path("board.png"),
+    AssetManager_LoadTexture(asset_manager,
+                                  get_asset_path("Board.png"),
                                   "board", 0, 0, 1.0f);
 
-    AssetManager_LoadTextureAsync(asset_manager,
-                                  get_asset_path("ball.png"),
+    AssetManager_LoadTexture(asset_manager,
+                                  get_asset_path("Ball.png"),
                                   "ball", 750, 425, 2.0f);
 
-    AssetManager_LoadTextureAsync(asset_manager,
-                                  get_asset_path("computer.png"),
+    AssetManager_LoadTexture(asset_manager,
+                                  get_asset_path("Computer.png"),
                                   "player_paddle", 10, 350, 2.0f);
 
-    AssetManager_LoadTextureAsync(asset_manager,
-                                  get_asset_path("player.png"),
+    AssetManager_LoadTexture(asset_manager,
+                                  get_asset_path("Player.png"),
                                   "cpu_paddle", 1560, 350, 2.0f);
 
     LOG_INFO("Menu asset jobs queued");
