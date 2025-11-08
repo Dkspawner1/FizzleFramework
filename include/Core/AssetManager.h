@@ -1,36 +1,52 @@
 ﻿#ifndef FIZZLEFRAMEWORK_ASSET_MANAGER_H
 #define FIZZLEFRAMEWORK_ASSET_MANAGER_H
 #include <Core/Texture.h>
-#include <SDL3/SDL_asyncio.h>
+#include <SDL3/SDL.h>
+#include <stdbool.h>
+
+// Load job
+typedef struct {
+    char filepath[512];
+    char id[256];
+    float x, y, scale;
+    SDL_Texture *result_texture;
+    bool completed;
+    bool failed;
+} LoadJob;
 
 typedef struct AssetManager {
-    SDL_AsyncIOQueue *queue;
+    SDL_Renderer *renderer;
+
+    // Texture cache
     Texture **textures;
     int count;
     int capacity;
-    SDL_Renderer *renderer;
+
+    // Job queue
+    LoadJob *jobs;
+    int job_count;
+    int job_capacity;
+
+    // Threading
+    SDL_Thread *loader_thread;
+    SDL_Mutex *queue_mutex;
+    SDL_Condition *queue_condition;
+    bool shutdown;
 } AssetManager;
 
 AssetManager *AssetManager_Create(SDL_Renderer *renderer);
 
-// Queue async file load (non-blocking, returns immediately)
 void AssetManager_LoadTextureAsync(AssetManager *manager,
-                                   const char *filepath,
-                                   const char *id,
-                                   float x, float y, float scale);
+                                  const char *filepath,
+                                  const char *id,
+                                  float x, float y, float scale);
 
-// Poll for completed async I/O and upload to GPU (main thread only)
 void AssetManager_PollResults(AssetManager *manager);
 
-// Retrieve texture from cache (returns NULL if not loaded yet)
 Texture *AssetManager_GetTexture(AssetManager *manager, const char *id);
 
-bool AssetManager_IsLoadingComplete(AssetManager *manager);
-
-// Unload a texture by ID (decrements refcount, frees if refcount == 0)
 void AssetManager_UnloadTexture(AssetManager *manager, const char *id);
 
-// Debug: print all loaded textures
 void AssetManager_PrintStats(const AssetManager *manager);
 
 void AssetManager_Destroy(AssetManager *manager);

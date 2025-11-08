@@ -9,19 +9,15 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
 endif ()
 
-# Collect all .c files from src/
+# ==============================================================================
+# SOURCES & LIBRARIES
+# ==============================================================================
 file(GLOB_RECURSE SOURCES "src/*.c")
-
 find_package(SDL3 REQUIRED)
 find_package(SDL3_image REQUIRED)
 
-# Add executable
 add_executable(${PROJECT_NAME} source.c ${SOURCES})
-
-# Include directories
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-# Link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3 SDL3_image::SDL3_image)
 
 # ==============================================================================
@@ -38,33 +34,39 @@ else ()
 endif ()
 
 # ==============================================================================
-# ASSET PATH - Bake absolute path to source assets directory
+# ASSET PATH - Use absolute path to build directory assets
 # ==============================================================================
-# Always use absolute path to source assets (works for debug and release)
-add_compile_definitions(ASSETS_DIR="${CMAKE_SOURCE_DIR}/assets")
-message(STATUS "📦 Assets directory: ${CMAKE_SOURCE_DIR}/assets")
+# CMAKE_BINARY_DIR is the build directory (cmake-build-debug)
+# We want: C:/Users/dorll/CLionProjects/FizzleFramework/cmake-build-debug/assets
+set(ASSETS_PATH "${CMAKE_BINARY_DIR}/assets")
+
+# Convert backslashes to forward slashes for C string literal
+string(REPLACE "\\" "/" ASSETS_PATH_NORMALIZED "${ASSETS_PATH}")
+
+add_compile_definitions(ASSETS_DIR="${ASSETS_PATH_NORMALIZED}")
+message(STATUS "Assets directory: ${ASSETS_PATH_NORMALIZED}")
 
 # ==============================================================================
-# ASSET COPYING
+# ASSET COPYING - Copy from source to build directory
 # ==============================================================================
-if (EXISTS ${CMAKE_SOURCE_DIR}/assets)
-    add_custom_target(copy_assets ALL
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_SOURCE_DIR}/assets
-            ${CMAKE_BINARY_DIR}/assets
-            COMMENT "📦 Copying assets..."
-    )
-    add_dependencies(${PROJECT_NAME} copy_assets)
-    message(STATUS "✅ Assets will be copied to: ${CMAKE_BINARY_DIR}/assets")
-else ()
-    message(WARNING "⚠️ No assets folder found at ${CMAKE_SOURCE_DIR}/assets")
+if (NOT EXISTS ${CMAKE_SOURCE_DIR}/assets)
+    message(FATAL_ERROR "ERROR: No assets folder found at ${CMAKE_SOURCE_DIR}/assets")
 endif ()
 
+add_custom_target(copy_assets ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/assets
+        ${CMAKE_BINARY_DIR}/assets
+        COMMENT "Copying assets to build directory..."
+)
+
+add_dependencies(${PROJECT_NAME} copy_assets)
+
 # ==============================================================================
-# DEPENDENCY DLL COPYING FOR WINDOWS RELEASE
+# DLL COPYING FOR WINDOWS
 # ==============================================================================
 if (WIN32)
-    # Get library locations
+    # Get SDL3 library locations
     get_target_property(SDL3_LOCATION SDL3::SDL3 IMPORTED_LOCATION_RELEASE)
     if (NOT SDL3_LOCATION)
         get_target_property(SDL3_LOCATION SDL3::SDL3 IMPORTED_LOCATION)
@@ -75,46 +77,47 @@ if (WIN32)
         get_target_property(SDL3_IMAGE_LOCATION SDL3_image::SDL3_image IMPORTED_LOCATION)
     endif ()
 
-    # Copy main SDL3 DLLs
+    # Copy SDL3.dll
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${SDL3_LOCATION}"
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>/SDL3.dll"
-            COMMENT "📦 Copying SDL3.dll..."
+            COMMENT "Copying SDL3.dll..."
     )
 
+    # Copy SDL3_image.dll
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${SDL3_IMAGE_LOCATION}"
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>/SDL3_image.dll"
-            COMMENT "📦 Copying SDL3_image.dll..."
+            COMMENT "Copying SDL3_image.dll..."
     )
 
-    # Copy dependencies from MSYS2
+    # Copy MSYS2 dependencies
     set(MSYS2_BIN "C:/msys64/ucrt64/bin")
 
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${MSYS2_BIN}/libpng16-16.dll"
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>/libpng16-16.dll"
-            COMMENT "📦 Copying libpng16-16.dll..."
+            COMMENT "Copying libpng16-16.dll..."
     )
 
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${MSYS2_BIN}/zlib1.dll"
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>/zlib1.dll"
-            COMMENT "📦 Copying zlib1.dll..."
+            COMMENT "Copying zlib1.dll..."
     )
 
-    message(STATUS "✅ DLL copying enabled for Windows")
+    message(STATUS "DLL copying enabled")
 endif ()
 
 # ==============================================================================
 # BUILD INFO
 # ==============================================================================
 message(STATUS "")
-message(STATUS "🎮 FizzleFramework Configuration")
+message(STATUS "FizzleFramework Build Configuration")
 message(STATUS "   Build Type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "   C Standard: ${CMAKE_C_STANDARD}")
 message(STATUS "   Generator: ${CMAKE_GENERATOR}")

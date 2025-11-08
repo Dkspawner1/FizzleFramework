@@ -9,13 +9,13 @@ typedef struct Scene {
 
     void (*initialize)(void);
 
-    void (*load_assets)(void);
-
+    void (*load_assets)(AssetManager *asset_manager); // ✅ Pass AssetManager
     void (*update)(float deltatime);
 
-    void (*render)(void);
-
+    void (*render)(SDL_Renderer *renderer, AssetManager *asset_manager); // ✅ Pass both
     void (*destroy)(void);
+
+    AssetManager *asset_manager;
 } Scene;
 
 static inline void Scene_Destroy(Scene *scene) {

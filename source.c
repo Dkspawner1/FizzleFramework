@@ -13,7 +13,6 @@ int main(int argc, char *argv[]) {
 
     Application application = Application_Create();
     Application_Initialize(&application);
-    Application_LoadAssets(&application);
     Application_Run(&application);
     Application_Destroy(&application);
     Logger_Shutdown();
