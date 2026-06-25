@@ -16,6 +16,7 @@ namespace fizzle
 
 	bool GraphicsDevice::Initialize(SDL_Window* window)
 	{
+
 		m_gpu = SDL_CreateGPUDevice(
 			SDL_GPU_SHADERFORMAT_SPIRV,
 			true,
@@ -88,7 +89,9 @@ namespace fizzle
 		pipeline_info.vertex_input_state.num_vertex_buffers = 1;
 		pipeline_info.vertex_input_state.vertex_buffer_descriptions = vertex_buffer_descriptions;
 
-		SDL_GPUVertexAttribute vertex_attributes[2];
+
+		//SDL_GPUVertexAttribute vertex_attributes[2];
+		SDL_GPUVertexAttribute vertex_attributes[1];
 
 		// a_position
 		vertex_attributes[0].buffer_slot = 0;
@@ -96,13 +99,15 @@ namespace fizzle
 		vertex_attributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
 		vertex_attributes[0].offset = 0;
 
-		// a_color
-		vertex_attributes[1].buffer_slot = 0;
-		vertex_attributes[1].location = 1;
-		vertex_attributes[1].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT4;
-		vertex_attributes[1].offset = sizeof(float) * 3;
+		//// a_color
+		//vertex_attributes[1].buffer_slot = 0;
+		//vertex_attributes[1].location = 1;
+		//vertex_attributes[1].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT4;
+		//vertex_attributes[1].offset = sizeof(float) * 3;
 
-		pipeline_info.vertex_input_state.num_vertex_attributes = 2;
+		//pipeline_info.vertex_input_state.num_vertex_attributes = 2;
+		pipeline_info.vertex_input_state.num_vertex_attributes = 1;
+
 		pipeline_info.vertex_input_state.vertex_attributes = vertex_attributes;
 
 		SDL_GPUColorTargetDescription color_target_descriptions[1];
@@ -143,7 +148,6 @@ namespace fizzle
 			vertex_buffer = nullptr;
 			LOG_INFO("GPU buffers released");
 		}
-
 
 		if (m_graphics_pipeline)
 		{
@@ -216,6 +220,26 @@ namespace fizzle
 
 		LOG_INFO("Geometry uploaded to GPU ({} bytes)", sizeof(g_vertices));
 		return true;
+	}
+
+
+	void GraphicsDevice::RenderGeometry(SDL_GPURenderPass* render_pass) const
+	{
+		if (!m_graphics_pipeline || !vertex_buffer)
+		{
+			LOG_ERROR("RenderGeometry called before pipeline/buffer are ready");
+			return;
+		}
+
+		SDL_BindGPUGraphicsPipeline(render_pass, m_graphics_pipeline);
+
+		SDL_GPUBufferBinding vertex_binding{};
+		vertex_binding.buffer = vertex_buffer;
+		vertex_binding.offset = 0;
+		SDL_BindGPUVertexBuffers(render_pass, 0, &vertex_binding, 1);
+
+		// 6 vertices = 2 triangles = 1 quad, 1 instance
+		SDL_DrawGPUPrimitives(render_pass, 6, 1, 0, 0);
 	}
 
 } // namespace Fizzle

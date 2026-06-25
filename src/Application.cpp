@@ -2,11 +2,11 @@
 #include <debug/logger.h>
 #include <SDL3_shadercross/SDL_shadercross.h>
 
+#include <numbers>
+
 using namespace fizzle::debug;
 
 namespace fizzle {
-
-
 
 	Application::Application()
 	{
@@ -152,11 +152,15 @@ namespace fizzle {
 			color_target_info.texture = swapchain;
 			color_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
 			color_target_info.store_op = SDL_GPU_STOREOP_STORE;
-			color_target_info.clear_color = { .r = 1.0f, .g = 0.0f, .b = 0.577f, .a = 1.0f };
+			color_target_info.clear_color = { .r = 1.0f, .g = 0.0f, .b = std::numbers::egamma_v<float>, .a = 1.0f };
 
-			SDL_GPURenderPass* pass = SDL_BeginGPURenderPass(command_buffer, &color_target_info, 1, nullptr);
+			SDL_GPURenderPass* render_pass = SDL_BeginGPURenderPass(command_buffer, &color_target_info, 1, nullptr);
 			// draw calls go here
-			SDL_EndGPURenderPass(pass);
+
+			m_graphics_device.RenderGeometry(render_pass);
+
+
+			SDL_EndGPURenderPass(render_pass);
 		}
 
 		SDL_SubmitGPUCommandBuffer(command_buffer);

@@ -4,7 +4,6 @@
 
 namespace fizzle
 {
-
 	class GraphicsDevice
 	{
 	public:
@@ -22,17 +21,17 @@ namespace fizzle
 		[[nodiscard]] SDL_GPUDevice* GetDevice() const { return m_gpu; }
 
 		[[nodiscard]] bool UploadGeometry();
+		void RenderGeometry(SDL_GPURenderPass* render_pass) const;
 
 		SDL_GPUBuffer* vertex_buffer = nullptr;
 
 	private:
 		SDL_GPUDevice* m_gpu = nullptr;
 		SDL_GPUTransferBuffer* m_transfer_buffer = nullptr;
-		SDL_GPUGraphicsPipeline *m_graphics_pipeline = nullptr;
+		SDL_GPUGraphicsPipeline* m_graphics_pipeline = nullptr;
 
 
 		SDL_GPUShader* m_vertex_shader = nullptr;
 		SDL_GPUShader* m_fragment_shader = nullptr;
 	};
-
 } // namespace Fizzle
