@@ -1,8 +1,0 @@
-# ninja log v7
-11	92	8038505426122405	CMakeFiles/SDL3_shadercross-shared.dir/src/version.rc.res	b883b6192391563b
-16	212	8038505426197865	CMakeFiles/shadercross.dir/src/cli.c.obj	1a3426436729266
-6	258	8038505426071447	CMakeFiles/SDL3_shadercross-shared.dir/src/SDL_shadercross.c.obj	30a9dffb1ff77f5d
-259	645	8038505431668363	SDL3_shadercross.dll	2090648a69f9979
-259	645	8038505431668363	SDL3_shadercross.lib	2090648a69f9979
-646	754	8038505432489079	shadercross.exe	806abb5e98fedb02
-754	975	8038505433571680	CMakeFiles/install.util	379624d154c9b134

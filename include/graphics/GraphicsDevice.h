@@ -1,10 +1,8 @@
 #pragma once
 
-#include <debug/logger.h>
 #include <SDL3/SDL.h>
-#include <graphics/Vertex.h>
 
-namespace Fizzle
+namespace fizzle
 {
 
     class GraphicsDevice

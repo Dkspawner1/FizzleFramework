@@ -1,7 +1,0 @@
-C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/sdl3-shadercross/x64-windows-rel/CMakeFiles/SDL3_shadercross-shared.dir
-C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/sdl3-shadercross/x64-windows-rel/CMakeFiles/shadercross.dir
-C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/sdl3-shadercross/x64-windows-rel/CMakeFiles/edit_cache.dir
-C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/sdl3-shadercross/x64-windows-rel/CMakeFiles/rebuild_cache.dir
-C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/sdl3-shadercross/x64-windows-rel/CMakeFiles/list_install_components.dir
-C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/sdl3-shadercross/x64-windows-rel/CMakeFiles/install.dir
-C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/sdl3-shadercross/x64-windows-rel/CMakeFiles/install/local.dir

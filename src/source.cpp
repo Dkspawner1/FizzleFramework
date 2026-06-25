@@ -1,7 +1,9 @@
 ﻿#include <iostream>
 #include <Application.h>
 
-int main(const int argc, const char* argv[])
+using namespace fizzle;
+
+int main([[maybe_unused]] const int argc, [[maybe_unused]] const char* argv[])
 {
 	Application application;
 	application.Run();

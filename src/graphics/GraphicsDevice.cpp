@@ -1,8 +1,9 @@
+#include <debug/logger.h>
 #include <graphics/GraphicsDevice.h>
+#include <graphics/Vertex.h>
 
-using namespace Fizzle::Debug;
 
-namespace Fizzle
+namespace fizzle
 {
 
     GraphicsDevice::~GraphicsDevice()
