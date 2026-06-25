@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-headers/x64-windows-rel/cmake_install.cmake",
+		"C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-headers/x64-windows-rel/tests/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

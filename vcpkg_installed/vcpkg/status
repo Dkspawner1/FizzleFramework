@@ -1,0 +1,67 @@
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 34a97977dbe7c083891df7aa8c7c7fe5f53d88b7f4806d09d70c0b241482d663
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: b632ca9f7454d4746852f34078c5c5a35b5956e0267f5bf2baa6e71fb121474d
+Status: install ok installed
+
+Package: spirv-headers
+Version: 1.4.350.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: b95fca8a833b9bde7beebc8a0103318aa57e5140828d89309c3c3358532ea46c
+Description: Machine-readable files for the SPIR-V Registry
+Status: install ok installed
+
+Package: spirv-cross
+Version: 1.4.350.0
+Depends: spirv-headers, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 97bf5a73361083f320fdd0b7193e599e6ec4f469a8693be97d506236bd518d94
+Description: SPIRV-Cross is a practical tool and library for performing reflection on SPIR-V and disassembling SPIR-V back to high level languages.
+Status: install ok installed
+
+Package: sdl3
+Version: 3.4.8
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 0f0625dba90ddbfb1d8d26efed631b6e394b12ee3d15480029017620179275c9
+Description: Simple DirectMedia Layer is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL and Direct3D.
+Status: install ok installed
+
+Package: sdl3
+Feature: vulkan
+Architecture: x64-windows
+Multi-Arch: same
+Description: Vulkan functionality for SDL
+Status: install ok installed
+
+Package: directx-dxc
+Version: 2026-02-20
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 68b88a4a6eb592354e2c7dc7f9a4d4715b20b6ab17fd2d9a8c37f0ab4298ddcf
+Description: DirectX Shader Compiler (LLVM/Clang)
+Status: install ok installed
+
+Package: sdl3-shadercross
+Version: 3.0.0-preview2
+Depends: directx-dxc, sdl3, spirv-cross, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: f607de4771f1096f296640f08860fc7bf67213a1c98e6765da54c6f286af2699
+Description: This is a library for translating shaders to different formats, intended for use with SDL's GPU API. It takes SPIRV or HLSL as the source and outputs DXBC, DXIL, SPIRV, MSL, or HLSL.
+Status: install ok installed
+

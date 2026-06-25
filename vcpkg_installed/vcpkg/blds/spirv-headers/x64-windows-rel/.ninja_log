@@ -1,0 +1,8 @@
+# ninja log v7
+9	103	8038504536030535	tests/CMakeFiles/spirv_headers_simple_test_cpp11.dir/example11.cpp.obj	c1042eecfd082042
+12	113	8038504536051567	tests/CMakeFiles/spirv_headers_simple_test_c.dir/example.c.obj	c33b1e37a855cceb
+5	121	8038504535927267	tests/CMakeFiles/spirv_headers_simple_test.dir/example.cpp.obj	454a91453b5ac63e
+104	244	8038504536986702	tests/spirv_headers_simple_test_cpp11.exe	833b9a43166443c8
+113	246	8038504536986702	tests/spirv_headers_simple_test_c.exe	1c0a62d87305ea55
+122	246	8038504537143357	tests/spirv_headers_simple_test.exe	8ec2bec871070d9b
+246	421	8038504538405787	CMakeFiles/install.util	56dd1656c361877c

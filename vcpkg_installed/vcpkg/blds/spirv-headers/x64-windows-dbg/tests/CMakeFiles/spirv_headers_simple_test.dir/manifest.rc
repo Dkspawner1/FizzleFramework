@@ -1,0 +1,2 @@
+#pragma code_page(65001)
+1 /* CREATEPROCESS_MANIFEST_RESOURCE_ID */ 24 /* RT_MANIFEST */ "C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-headers/x64-windows-dbg/tests/CMakeFiles/spirv_headers_simple_test.dir/embed.manifest"

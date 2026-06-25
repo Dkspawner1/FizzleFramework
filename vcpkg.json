@@ -1,0 +1,8 @@
+{
+  "dependencies": [
+    "sdl3",
+    "sdl3-shadercross"
+  ],
+  "name": "fizzleframework",
+  "version": "0.1.0"
+}

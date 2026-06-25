@@ -1,0 +1,12 @@
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/sdl3-shadercross_x64-windows/lib/SDL3_shadercross.lib
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/sdl3-shadercross_x64-windows/bin/SDL3_shadercross.dll
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/sdl3-shadercross_x64-windows/share/sdl3_shadercross/SDL3_shadercross-shared-targets.cmake
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/sdl3-shadercross_x64-windows/share/sdl3_shadercross/SDL3_shadercross-shared-targets-release.cmake
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/sdl3-shadercross_x64-windows/include/SDL3_shadercross/SDL_shadercross.h
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/sdl3-shadercross_x64-windows/bin/shadercross.exe
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/sdl3-shadercross_x64-windows/share/sdl3_shadercross/SDL3_shadercrossConfig.cmake
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/sdl3-shadercross_x64-windows/share/sdl3_shadercross/SDL3_shadercrossConfigVersion.cmake
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/sdl3-shadercross_x64-windows/share/sdl3_shadercross/sdlcpu.cmake
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/sdl3-shadercross_x64-windows/share/sdl3_shadercross/FindDirectXShaderCompiler.cmake
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/sdl3-shadercross_x64-windows/lib/pkgconfig/sdl3-shadercross.pc
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/sdl3-shadercross_x64-windows/share/licenses/SDL3_shadercross/LICENSE.txt

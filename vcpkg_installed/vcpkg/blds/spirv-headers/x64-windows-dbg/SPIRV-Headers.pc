@@ -1,0 +1,8 @@
+includedir=C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/pkgs/spirv-headers_x64-windows/debug/include
+
+Name: SPIRV-Headers
+Description: Header files from the SPIR-V registry
+Version: 1.5.5
+Requires:
+Libs:
+Cflags: -I${includedir}

@@ -1,0 +1,15 @@
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/spirv-cross-core.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/spirv-cross-glsl.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/spirv-cross-cpp.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/spirv-cross-reflect.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/spirv-cross-msl.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/spirv-cross-hlsl.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/spirv-cross-util.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/spirv-cross-c.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/spirv-cross.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/test.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/edit_cache.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/rebuild_cache.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/list_install_components.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/install.dir
+C:/Users/Dorll/source/repos/FizzleFramework/vcpkg_installed/vcpkg/blds/spirv-cross/x64-windows-rel/CMakeFiles/install/local.dir
