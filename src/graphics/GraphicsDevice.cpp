@@ -16,7 +16,6 @@ namespace fizzle
 
 	bool GraphicsDevice::Initialize(SDL_Window* window)
 	{
-
 		m_gpu = SDL_CreateGPUDevice(
 			SDL_GPU_SHADERFORMAT_SPIRV,
 			true,
@@ -41,7 +40,9 @@ namespace fizzle
 
 
 		size_t vertex_code_size;
-		const auto vertex_code = SDL_LoadFile("C:/Users/Dorll/source/repos/FizzleFramework/assets/shaders/compiled/spirv/quad.vert.spv", &vertex_code_size);
+		const auto vertex_code = SDL_LoadFile(
+			"C:/Users/dorll/source/repos/FizzleFramework/assets/shaders/compiled/spirv/quad.vert.spv",
+			&vertex_code_size);
 
 		SDL_GPUShaderCreateInfo vertex_shader_data{};
 		vertex_shader_data.code = static_cast<Uint8*>(vertex_code);
@@ -58,7 +59,9 @@ namespace fizzle
 		SDL_free(vertex_code);
 
 		size_t fragment_code_size;
-		const auto fragment_code = SDL_LoadFile("C:/Users/Dorll/source/repos/FizzleFramework/assets/shaders/compiled/spirv/quad.frag.spv", &fragment_code_size);
+		const auto fragment_code = SDL_LoadFile(
+			"C:/Users/dorll/source/repos/FizzleFramework/assets/shaders/compiled/spirv/quad.frag.spv",
+			&fragment_code_size);
 		SDL_GPUShaderCreateInfo fragment_shader_data{};
 		fragment_shader_data.code = static_cast<Uint8*>(fragment_code);
 		fragment_shader_data.code_size = fragment_code_size;
@@ -241,5 +244,4 @@ namespace fizzle
 		// 6 vertices = 2 triangles = 1 quad, 1 instance
 		SDL_DrawGPUPrimitives(render_pass, 6, 1, 0, 0);
 	}
-
 } // namespace Fizzle

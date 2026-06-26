@@ -77,13 +77,13 @@ namespace fizzle {
 	{
 		if (!initialize())
 		{
-			LOG_CRITICAL("initialize() failed — aborting");
+			LOG_CRITICAL("initialize() failed");
 			return;
 		}
 
 		if (!load_assets())
 		{
-			LOG_CRITICAL("load_assets() failed — aborting");
+			LOG_CRITICAL("load_assets() failed");
 			return;
 		}
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <SDL3/SDL.h>
 #include <graphics/GraphicsDevice.h>
 
 namespace fizzle {
@@ -30,7 +29,8 @@ namespace fizzle {
 		SDL_Window* m_window = nullptr;
 		GraphicsDevice m_graphics_device;
 
-		bool   m_running = false;
+		bool m_running = false;
+
 		Uint64 m_performance_last = 0;
 		Uint64 m_performance_frequency = 0;
 		double m_delta_time = 0.0;
